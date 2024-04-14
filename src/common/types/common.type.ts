@@ -4,6 +4,6 @@ export interface AuthTokenType {
 }
 
 export interface UserTokenBaseType {
-  id: number | undefined;
-  username: string | undefined;
+  id?: number;
+  username?: string;
 }
