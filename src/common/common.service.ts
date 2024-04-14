@@ -1,26 +1,31 @@
+import jwt from 'jsonwebtoken';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
-import { AuthTokenType } from './types/common.type';
+import { AuthTokenType, UserTokenBaseType } from './types/common.type';
 
 @Injectable()
 export class CommonService {
-  constructor() {}
+  constructor(private configService: ConfigService) {}
+  private SESSION_SECRET = this.configService.get('SESSION_SECRET');
 
-  async creatToken(): Promise<AuthTokenType> {
+  async creatToken({
+    username,
+    id,
+  }: UserTokenBaseType): Promise<AuthTokenType> {
     return new Promise((resolve, reject) => {
       const data = {
         username,
         id,
-        _id,
       };
       try {
-        const token = jwt.sign(data, SESSION_SECRET, {
+        const token = jwt.sign(data, this.SESSION_SECRET, {
           expiresIn: '30d',
           issuer: 'weblab__issuer',
           subject: 'userInfo',
         });
 
-        const refreshToken = jwt.sign(data, SESSION_SECRET, {
+        const refreshToken = jwt.sign(data, this.SESSION_SECRET, {
           expiresIn: '365d',
           issuer: 'weblab__issuer',
           subject: 'userInfo',
