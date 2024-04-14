@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
 
 import { ArticleModule } from './article/article.module';
 import { CommonModule } from './common/common.module';
@@ -7,7 +8,7 @@ import { DatabaseModule } from './database/database.module';
 import { AuthGuard } from './middleware/guard/auth.guard';
 
 @Module({
-  imports: [ArticleModule, CommonModule, DatabaseModule],
+  imports: [ArticleModule, CommonModule, DatabaseModule, ConfigModule],
   providers: [
     {
       provide: APP_GUARD,
