@@ -42,7 +42,7 @@ async function bootstrap(): Promise<void> {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('CAREERABLE API')
+    .setTitle('AROUNDY API')
     .setDescription('The AROUNDY API description')
     .setVersion('1.0')
     .build();
