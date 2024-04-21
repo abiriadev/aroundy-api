@@ -20,7 +20,7 @@ async function bootstrap(): Promise<void> {
     },
   });
   const configService = app.get(ConfigService);
-  const port = configService.get('PORT') || 3000;
+  const port = configService.get('PORT') || 3330;
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
