@@ -1,4 +1,3 @@
-// src/auth/auth.middleware.ts
 import { RequestHandler } from '@nestjs/common/interfaces';
 import * as basicAuth from 'express-basic-auth';
 
