@@ -5,7 +5,11 @@ import {
   ValidationError,
   ValidationPipe,
 } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import {
+  DocumentBuilder,
+  SwaggerCustomOptions,
+  SwaggerModule,
+} from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 
 import { AppModule } from './app.module';
@@ -23,6 +27,7 @@ async function bootstrap(): Promise<void> {
   });
   const configService = app.get(ConfigService);
   const port = configService.get('PORT') || 3330;
+
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
@@ -57,7 +62,14 @@ async function bootstrap(): Promise<void> {
     )
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+
+  const swaggerCustomOptions: SwaggerCustomOptions = {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  };
+
+  SwaggerModule.setup('api-docs', app, document, swaggerCustomOptions);
 
   const redocOptions = {
     title: 'AROUNDY API',
