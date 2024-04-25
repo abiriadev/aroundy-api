@@ -47,6 +47,14 @@ async function bootstrap(): Promise<void> {
     .setTitle('AROUNDY API')
     .setDescription('The AROUNDY API description')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        in: 'header',
+      },
+      'Authorization',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
