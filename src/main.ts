@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import redoc from 'redoc-express';
 import {
   BadRequestException,
   ValidationError,
@@ -9,6 +10,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './middleware/filter/exception.filter';
+import { AuthMiddleware } from './middleware/auth.middleware';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, {
@@ -48,6 +50,16 @@ async function bootstrap(): Promise<void> {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
+
+  const redocOptions = {
+    title: 'AROUNDY API',
+    version: '1.0',
+    specUrl: '/api-docs-json',
+  };
+
+  app.use('/api-docs', AuthMiddleware);
+  app.use('/api-docs-json', AuthMiddleware);
+  app.use('/docs', AuthMiddleware, redoc(redocOptions));
 
   app.useGlobalFilters(new AllExceptionsFilter());
   await app.listen(port);
