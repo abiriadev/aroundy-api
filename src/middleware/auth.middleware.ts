@@ -2,9 +2,8 @@ import { RequestHandler } from '@nestjs/common/interfaces';
 import * as basicAuth from 'express-basic-auth';
 
 export function AuthMiddleware(): RequestHandler {
-  const DOC_PASSWORD = process.env.DOC_PASSWORD;
   return basicAuth({
-    users: { admin: DOC_PASSWORD },
+    users: { admin: '1234' },
     challenge: true,
   });
 }
