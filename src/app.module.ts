@@ -7,12 +7,16 @@ import { DatabaseModule } from './database/database.module';
 import { AuthGuard } from './middleware/guard/auth.guard';
 import { PostModule } from './post/post.module';
 import { AccountModule } from './account/account.module';
+import { envFilePath } from './load-env';
 
 @Module({
   imports: [
     CommonModule,
     DatabaseModule,
-    ConfigModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath,
+    }),
     PostModule,
     AccountModule,
   ],

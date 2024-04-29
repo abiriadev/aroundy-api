@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 
 const env = process.env.NODE_ENV || 'local';
-export const envFilePath = `.env.${env}`;
+const envFilePath = `.env.${env}`;
 const exists = fs.existsSync(envFilePath);
 
 if (exists) {
@@ -10,3 +10,4 @@ if (exists) {
 } else {
   dotenv.config();
 }
+export { envFilePath };
