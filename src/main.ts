@@ -1,17 +1,14 @@
 import './load-env';
 import { NestFactory } from '@nestjs/core';
 import redoc from 'redoc-express';
-import {
-  BadRequestException,
-  ValidationError,
-  ValidationPipe,
-} from '@nestjs/common';
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import {
   DocumentBuilder,
   SwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { ValidationError } from 'class-validator';
 
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './middleware/filter/exception.filter';
