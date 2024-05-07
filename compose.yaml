@@ -1,0 +1,25 @@
+services:
+  api:
+    image: reg/api
+    restart: always
+    ports:
+      - 80:3330
+    environment:
+      APP_FULL_BASE_URL: https://192.168.31.196:8081
+    depends_on:
+      - db
+  db:
+    image: mysql:8.4.0
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MY_DB_PASSWORD}
+    volumes:
+      - type: volumn
+        source: db
+        target: /var/lib/mysql
+      - type: bind
+        source: ./init
+        target: /docker-entrypoint-initdb.d/
+        read_only: true
+volumes:
+  db:

@@ -1,0 +1,12 @@
+services:
+  api:
+    build: .
+    restart: 'no'
+    ports:
+      - 80:3330
+    depends_on:
+      - db
+  db:
+    restart: 'no'
+    ports:
+      - 3306:3306
