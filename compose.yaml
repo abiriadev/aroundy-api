@@ -14,7 +14,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=${MY_DB_PASSWORD}
     volumes:
-      - type: volumn
+      - type: volume
         source: db
         target: /var/lib/mysql
       - type: bind
