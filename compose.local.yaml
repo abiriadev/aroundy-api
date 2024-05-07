@@ -3,7 +3,7 @@ services:
     build: .
     restart: 'no'
     ports:
-      - 80:3330
+      - 3330:3330
     profiles:
       - api
     depends_on:
