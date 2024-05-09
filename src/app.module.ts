@@ -8,6 +8,7 @@ import { AuthGuard } from './middleware/guard/auth.guard';
 import { PostModule } from './post/post.module';
 import { AccountModule } from './account/account.module';
 import { envFilePath } from './load-env';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { envFilePath } from './load-env';
     }),
     PostModule,
     AccountModule,
+    CategoriesModule,
   ],
   providers: [
     {
