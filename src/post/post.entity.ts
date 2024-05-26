@@ -16,7 +16,7 @@ export class Post {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: false })
   title: string;
 
   @Column('text', { array: true, nullable: true })
@@ -31,8 +31,8 @@ export class Post {
   @Column({ nullable: true })
   caption: string;
 
-  @Column({ nullable: true })
-  geo: string;
+  @Column('simple-array', { nullable: true })
+  geo: [number, number];
 
   @Column({ nullable: true })
   phone: string;
@@ -55,13 +55,13 @@ export class Post {
   @Column({ nullable: true })
   end_date: Date;
 
-  @Column({ default: false })
+  @Column({ nullable: false, default: false })
   is_online: boolean;
 
-  @Column({ default: false })
+  @Column({ nullable: false, default: false })
   is_offline: boolean;
 
-  @Column({ default: 0 })
+  @Column({ nullable: false, default: 0 })
   view_count: number;
 
   @ManyToOne(() => Category)
