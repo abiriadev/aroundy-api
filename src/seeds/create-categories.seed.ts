@@ -4,14 +4,12 @@ import { Category } from '../category/category.entity';
 
 export default class CreateCategories implements Seeder {
   public async run(
-    dataSource: DataSource, // eslint-disable-line
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    dataSource: DataSource,
     factoryManager: SeederFactoryManager,
   ): Promise<void> {
     const categoryRepository = dataSource.getRepository(Category);
 
-    await categoryRepository.clear();
-
+    // Insert new category data
     await categoryRepository.insert([
       { name: '팝업스토어' },
       { name: '뷰티' },
