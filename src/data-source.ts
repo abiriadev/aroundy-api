@@ -1,11 +1,14 @@
 /* eslint-disable */
+import { config } from 'dotenv';
+config();
+
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { SeederOptions } from 'typeorm-extension';
-import { Category } from './src/category/category.entity';
-import { Company } from './src/company/company.entity';
-import { User } from './src/user/user.entity';
-import { Post } from './src/post/post.entity';
-import CreateCategories from './src/seeds/create-categories.seed';
+import { Category } from './category/category.entity';
+import { Company } from './company/company.entity';
+import { User } from './user/user.entity';
+import { Post } from './post/post.entity';
+import CreateCategories from './seeds/create-categories.seed';
 
 const dataSourceOptions: DataSourceOptions & SeederOptions = {
   type: 'postgres',
@@ -15,7 +18,7 @@ const dataSourceOptions: DataSourceOptions & SeederOptions = {
   password: process.env.TYPEORM_PASSWORD,
   database: process.env.TYPEORM_DATABASE,
   entities: [Category, Company, User, Post],
-  synchronize: true,
+  synchronize: false,
   seeds: [CreateCategories],
   factories: [],
 };
