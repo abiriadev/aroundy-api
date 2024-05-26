@@ -7,28 +7,36 @@ import { Post } from './post.entity';
 export class PostService {
   constructor(
     @InjectRepository(Post)
-    private postRepository: Repository<Post>,
+    private readonly postRepository: Repository<Post>,
   ) {}
 
-  findAll(): Promise<Post[]> {
+  async findAll(): Promise<Post[]> {
     return this.postRepository.find();
   }
 
-  findOne(id: string): Promise<Post> {
+  async findOne(id: string): Promise<Post> {
     return this.postRepository.findOne({ where: { id } });
   }
 
-  create(post: Post): Promise<Post> {
+  async create(post: Post): Promise<Post> {
     return this.postRepository.save(post);
   }
 
   async update(id: string, post: Post): Promise<Post> {
-    await this.postRepository.update(id, { ...post, updated_at: new Date() });
-    return this.findOne(id);
+    await this.postRepository.update(id, post);
+    return this.postRepository.findOne({ where: { id } });
   }
 
   async remove(id: string): Promise<Post> {
-    await this.postRepository.update(id, { deleted_at: new Date() });
-    return this.findOne(id);
+    const post = await this.postRepository.findOne({ where: { id } });
+    await this.postRepository.delete(id);
+    return post;
+  }
+
+  async addImages(id: string, images: string[]): Promise<Post> {
+    const post = await this.postRepository.findOne({ where: { id } });
+    post.feed_urls = [...(post.feed_urls || []), ...images];
+    await this.postRepository.save(post);
+    return post;
   }
 }
