@@ -7,13 +7,14 @@ export default class CreateTags implements Seeder {
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,
   ): Promise<void> {
-    const tagRepository = dataSource.getRepository(Tag);
+    const tagFactory = factoryManager.get(Tag);
 
-    // Insert new tag data
-    await tagRepository.insert([
-      { name: 'New' },
-      { name: '이벤트' },
-      { name: '할인' },
-    ]);
+    // 고정된 태그 데이터를 생성합니다
+    const tags = [{ name: 'New' }, { name: '이벤트' }, { name: '할인' }];
+
+    for (const tagData of tags) {
+      const tag = await tagFactory.make(tagData);
+      await dataSource.getRepository(Tag).save(tag);
+    }
   }
 }

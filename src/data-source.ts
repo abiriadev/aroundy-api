@@ -8,7 +8,10 @@ import { Category } from './category/category.entity';
 import { Company } from './company/company.entity';
 import { User } from './user/user.entity';
 import { Post } from './post/post.entity';
+import { Tag } from './tag/tag.entity';
 import CreateCategories from './seeds/create-categories.seed';
+import CreateTags from './seeds/create-tags.seed';
+import tagFactory from './factories/tag.factory';
 
 const dataSourceOptions: DataSourceOptions & SeederOptions = {
   type: 'postgres',
@@ -17,10 +20,10 @@ const dataSourceOptions: DataSourceOptions & SeederOptions = {
   username: process.env.TYPEORM_USERNAME,
   password: process.env.TYPEORM_PASSWORD,
   database: process.env.TYPEORM_DATABASE,
-  entities: [Category, Company, User, Post],
-  synchronize: false,
-  seeds: [CreateCategories],
-  factories: [],
+  entities: [Category, Company, User, Post, Tag],
+  synchronize: true,
+  seeds: [CreateCategories, CreateTags],
+  factories: [tagFactory],
 };
 
 const dataSource = new DataSource(dataSourceOptions);
