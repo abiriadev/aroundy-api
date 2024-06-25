@@ -9,7 +9,6 @@ export default class CreateTags implements Seeder {
   ): Promise<void> {
     const tagFactory = factoryManager.get(Tag);
 
-    // 고정된 태그 데이터를 생성합니다
     const tags = [{ name: 'New' }, { name: '이벤트' }, { name: '할인' }];
 
     for (const tagData of tags) {
