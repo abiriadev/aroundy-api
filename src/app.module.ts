@@ -9,12 +9,12 @@ import { TagModule } from './tag/tag.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
-import { env } from 'node:process';
-import { configValidator } from './config/config.validator';
+import { configConfig } from './config/config.config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(typeOrmConfig),
+    ConfigModule.forRoot(configConfig),
+    TypeOrmModule.forRootAsync(typeOrmConfig),
     UserModule,
     CategoryModule,
     CompanyModule,
@@ -22,12 +22,6 @@ import { configValidator } from './config/config.validator';
     TagModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
-    }),
-    ConfigModule.forRoot({
-      ignoreEnvFile: env.NODE_ENV === 'production',
-      envFilePath: env.NODE_ENV === 'production' ? undefined : '.local.env',
-      expandVariables: true,
-      validate: configValidator,
     }),
   ],
 })
