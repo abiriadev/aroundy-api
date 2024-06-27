@@ -8,6 +8,9 @@ import { PostModule } from './post/post.module';
 import { TagModule } from './tag/tag.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ConfigModule } from '@nestjs/config';
+import { env } from 'node:process';
+import { configValidator } from './config/config.validator';
 
 @Module({
   imports: [
@@ -19,6 +22,12 @@ import { join } from 'path';
     TagModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
+    }),
+    ConfigModule.forRoot({
+      ignoreEnvFile: env.NODE_ENV === 'production',
+      envFilePath: env.NODE_ENV === 'production' ? undefined : '.local.env',
+      expandVariables: true,
+      validate: configValidator,
     }),
   ],
 })
