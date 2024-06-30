@@ -26,7 +26,7 @@ export class NetworkConfig {
   cors: string[] = [];
 }
 
-export class AuthCredentialConfig {
+export class AuthConfig {
   @IsString()
   @MinLength(4)
   jwt_secret: string;
@@ -39,7 +39,7 @@ export class AuthCredentialConfig {
   pepper: string;
 }
 
-export class DbCredentialConfig {
+export class DbConfig {
   @IsString()
   db_host: string = 'db';
 
