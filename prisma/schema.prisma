@@ -1,0 +1,110 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// NOTE: Phase 1.5
+enum Gender {
+    MALE
+    FEMALE
+}
+
+// NOTE: Phase 1.5
+// may change a lot later
+model User {
+    // inherited fields
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    // auth information
+    // NOTE: we do *NOT* store password hash since we are using OAuth
+    oauthId            String   @unique
+    oauthProvider      String // TODO: will be enum
+    recentlyLoggedInAt DateTime
+
+    // personal information
+    // all fields optional for now
+    name   String?
+    gender Gender?
+    email  String?   @unique
+    tel    String?   @unique
+    birth  DateTime?
+}
+
+model Post {
+    // inherited fields
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    title       String                @db.VarChar(16)
+    feeds       String[]
+    caption     String                @db.VarChar(2200)
+    isOnline    Boolean
+    isOffline   Boolean
+    location    Unsupported("point")?
+    region      String?
+    branch      String?
+    contact     String?
+    publishedAt DateTime
+    startedAt   DateTime?
+    endedAt     DateTime?
+    link        String?
+    likes       Int // TODO: will have a relation with User later
+    views       Int
+
+    // owned relations
+    tags Tag[]
+
+    // referenced relations
+    categoryId String
+    category   Category @relation(fields: [categoryId], references: [id], onDelete: NoAction)
+    companyId  String
+    company    Company  @relation(fields: [companyId], references: [id], onDelete: NoAction)
+}
+
+model Company {
+    // inherited fields
+    id        String    @id @default(uuid())
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+
+    name String @unique
+    logo String
+
+    // owned relations
+    post Post[]
+}
+
+model Category {
+    // inherited fields
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    name String @unique
+
+    // owned relations
+    post Post[]
+}
+
+model Tag {
+    // inherited fields
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    name String @unique
+
+    // referenced relations
+    postId String?
+    post   Post?   @relation(fields: [postId], references: [id])
+}
