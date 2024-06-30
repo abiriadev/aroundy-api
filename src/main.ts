@@ -1,13 +1,29 @@
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ConfigType } from './config/config.schema';
-import { ConfigService } from '@nestjs/config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NetworkConfig } from './config/config.schema';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const configService: ConfigService<ConfigType> = app.get(ConfigService);
-  const port = configService.get('PORT', { infer: true });
-  await app.listen(port);
-  console.log(`Application is running on: ${port}`);
+
+  const networkConfigService = app.get(NetworkConfig);
+
+  SwaggerModule.setup(
+    'openapi',
+    app,
+    SwaggerModule.createDocument(
+      app,
+      new DocumentBuilder()
+        .setTitle('Cats example')
+        .setDescription('The cats API description')
+        .setVersion('1.0')
+        .addTag('cats')
+        .build(),
+    ),
+  );
+
+  await app.listen(networkConfigService.port);
+  console.log(`Application is running on: ${networkConfigService.port}`);
 }
 bootstrap();

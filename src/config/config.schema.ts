@@ -1,44 +1,59 @@
-import { z } from 'zod';
+import { MinLength, IsInt, IsString, IsArray, IsEnum } from 'class-validator';
+import { Type } from 'class-transformer';
 
-const portSchema = z
-  .number()
-  .int()
-  .nonnegative()
-  .lt(1 << 16);
+enum LogLevel {
+  DEBUG = 'debug',
+  INFO = 'info',
+  WARN = 'warn',
+  ERROR = 'error',
+}
 
-const secretSchema = z.string().min(4);
+export class AppConfig {
+  @IsEnum(LogLevel)
+  level: LogLevel = LogLevel.INFO;
+}
 
-const networkConfigSchema = z.object({
-  HOST: z.string().default('api.teambigbox.com'),
-  PORT: portSchema.default(3000),
+export class NetworkConfig {
+  @IsString()
+  host: string = 'api.teambigbox.com';
 
-  // regex for allowed origins
-  CORS: z.string().array().default([]),
-});
+  @IsInt()
+  @Type(() => Number)
+  port: number = 3000;
 
-const authCredentialsConfigSchema = z.object({
-  JWT_SECRET: secretSchema,
-  JWT_EXPIRY: z.string().default('4w'),
-  PEPPER: secretSchema,
-});
+  @IsArray()
+  @IsString({ each: true })
+  cors: string[] = [];
+}
 
-const dbCredentialsConfigSchema = z.object({
-  DB_HOST: z.string().default('db'),
-  DB_PORT: portSchema.default(5432),
-  DB_USER: z.string().default('postgres'),
-  DB_PASSWORD: secretSchema,
-  DB_DATABASE: z.string().default('aroundy'),
-});
+export class AuthCredentialConfig {
+  @IsString()
+  @MinLength(4)
+  jwt_secret: string;
 
-const logConfigSchema = z.object({
-  LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
-});
+  @IsString()
+  jwt_expiry: string = '4w';
 
-export const configSchema = z
-  .object({})
-  .merge(networkConfigSchema)
-  .merge(authCredentialsConfigSchema)
-  .merge(dbCredentialsConfigSchema)
-  .merge(logConfigSchema);
+  @IsString()
+  @MinLength(4)
+  pepper: string;
+}
 
-export type ConfigType = z.infer<typeof configSchema>;
+export class DbCredentialConfig {
+  @IsString()
+  db_host: string = 'db';
+
+  @IsInt()
+  @Type(() => Number)
+  db_port: number = 5432;
+
+  @IsString()
+  db_user: string = 'postgres';
+
+  @IsString()
+  @MinLength(4)
+  db_password: string;
+
+  @IsString()
+  db_database: string = 'aroundy';
+}

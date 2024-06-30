@@ -1,11 +1,25 @@
+import { TypedConfigModule, dotenvLoader } from 'nest-typed-config';
 import { env } from 'node:process';
-import { configSchema } from './config.schema';
-import { parseEnv } from 'znv';
+import {
+  AppConfig,
+  NetworkConfig,
+  AuthCredentialConfig,
+  DbCredentialConfig,
+} from './config.schema';
 
-export const configConfig = {
-  ignoreEnvFile: env.NODE_ENV === 'production',
-  envFilePath: env.NODE_ENV === 'production' ? undefined : '.local.env',
-  expandVariables: true,
-  validate: (config: Record<string, string>) =>
-    parseEnv(config, configSchema.shape),
-};
+export const configConfig = [
+  AppConfig,
+  NetworkConfig,
+  AuthCredentialConfig,
+  DbCredentialConfig,
+].map((schema) =>
+  TypedConfigModule.forRoot({
+    schema,
+    load: dotenvLoader({
+      keyTransformer: (key) => key.toLowerCase(),
+      ignoreEnvFile: env.NODE_ENV === 'production',
+      envFilePath: '.local.env',
+      expandVariables: true,
+    }),
+  }),
+);
