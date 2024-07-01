@@ -35,4 +35,12 @@ describe('KakaoMapService', () => {
       '경기 고양시 덕양구 내곡동 488-14',
     );
   });
+
+  it('should not lookup address outside mainland', async () => {
+    const p1: Coordinate = [33.97895214870182, 126.83087576928808]; // 남해 바다속 어딘가
+    const p2: Coordinate = [31.579813302026533, 130.52791364547292]; // 일본 가고시마현
+
+    expect(await service.coordinateToAddress(p1)).toBeNull();
+    expect(await service.coordinateToAddress(p2)).toBeNull();
+  });
 });
