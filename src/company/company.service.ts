@@ -1,18 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-
-export interface Company {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  name: string;
-  logo: string;
-}
-
-export interface CreateCompany {
-  name: string;
-  logo: string;
-}
+import {
+  CompanyDto,
+  CreateCompanyDto,
+  PaginatedCompaniesDto,
+  UpdateCompanyDto,
+} from './company.dto';
 
 @Injectable()
 export class CompanyService {
@@ -26,10 +19,7 @@ export class CompanyService {
     name?: string;
     cursor?: string;
     take?: number;
-  }): Promise<{
-    items: Array<Company>;
-    cursor: string | null;
-  }> {
+  }): Promise<PaginatedCompaniesDto> {
     const items = await this.prismaService.company.findMany({
       select: {
         id: true,
@@ -60,13 +50,13 @@ export class CompanyService {
     };
   }
 
-  async create(company: CreateCompany) {
+  async create(company: CreateCompanyDto) {
     await this.prismaService.company.create({
       data: company,
     });
   }
 
-  async update(id: string, company: Partial<CreateCompany>) {
+  async update(id: string, company: UpdateCompanyDto) {
     await this.prismaService.company.update({
       where: { id },
       data: company,
