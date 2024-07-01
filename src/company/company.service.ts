@@ -1,37 +1,82 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Company } from './company.entity';
+import { PrismaService } from 'nestjs-prisma';
+
+interface Company {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  name: string;
+  logo: string;
+}
+
+interface CreateCompany {
+  name: string;
+  logo: string;
+}
 
 @Injectable()
 export class CompanyService {
-  constructor(
-    @InjectRepository(Company)
-    private companyRepository: Repository<Company>,
-  ) {}
+  constructor(private prismaService: PrismaService) {}
 
-  findAll(): Promise<Company[]> {
-    return this.companyRepository.find();
-  }
-
-  findOne(id: string): Promise<Company> {
-    return this.companyRepository.findOne({ where: { id } });
-  }
-
-  create(company: Company): Promise<Company> {
-    return this.companyRepository.save(company);
-  }
-
-  async update(id: string, company: Company): Promise<Company> {
-    await this.companyRepository.update(id, {
-      ...company,
-      updated_at: new Date(),
+  async findAll({
+    name,
+    cursor,
+    take,
+  }: {
+    name?: string;
+    cursor?: string;
+    take?: number;
+  }): Promise<{
+    items: Array<Company>;
+    cursor: string | null;
+  }> {
+    const items = await this.prismaService.company.findMany({
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        name: true,
+        logo: true,
+      },
+      where: {
+        deletedAt: null,
+        name: {
+          contains: name,
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: take ?? 10,
+      skip: cursor === undefined ? 0 : 1,
+      cursor: {
+        id: cursor,
+      },
     });
-    return this.findOne(id);
+
+    return {
+      items,
+      cursor: items.at(-1)?.id ?? null,
+    };
   }
 
-  async remove(id: string): Promise<Company> {
-    await this.companyRepository.update(id, { deleted_at: new Date() });
-    return this.findOne(id);
+  async create(company: CreateCompany) {
+    await this.prismaService.company.create({
+      data: company,
+    });
+  }
+
+  async update(id: string, company: Partial<CreateCompany>) {
+    await this.prismaService.company.update({
+      where: { id },
+      data: company,
+    });
+  }
+
+  async remove(id: string) {
+    await this.prismaService.company.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
   }
 }
