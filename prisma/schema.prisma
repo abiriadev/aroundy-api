@@ -13,6 +13,14 @@ enum Gender {
     FEMALE
 }
 
+enum Channel {
+    ONLINE
+    OFFLINE
+    BOTH
+    BRANCH
+    ONLINE_BRANCH
+}
+
 // NOTE: Phase 1.5
 // may change a lot later
 model User {
@@ -44,21 +52,21 @@ model Post {
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 
-    title       String                @db.VarChar(16)
-    feeds       String[]
-    caption     String                @db.VarChar(2200)
-    isOnline    Boolean
-    isOffline   Boolean
-    location    Unsupported("point")?
-    region      String?
-    branch      String?
-    contact     String?
-    publishedAt DateTime
-    startedAt   DateTime?
-    endedAt     DateTime?
-    link        String?
-    likes       Int // TODO: will have a relation with User later
-    views       Int
+    title        String                @db.VarChar(16)
+    feeds        String[]
+    caption      String                @db.VarChar(2200)
+    channel      Channel
+    location     Unsupported("point")?
+    locationText String?
+    region       String?
+    branch       String?
+    contact      String?
+    publishedAt  DateTime
+    startedAt    DateTime?
+    endedAt      DateTime?
+    link         String?
+    likes        Int // TODO: will have a relation with User later
+    views        Int
 
     // owned relations
     tags Tag[]
