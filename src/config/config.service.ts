@@ -57,3 +57,8 @@ export class DbConfig {
   @IsString()
   db_database: string = 'aroundy';
 }
+
+export class KakaoApiConfig {
+  @IsString()
+  kakaoApiKey: string;
+}

@@ -6,6 +6,7 @@ import {
   NetworkConfig,
   AuthConfig,
   DbConfig,
+  KakaoApiConfig,
 } from './config.service';
 
 @Module({})
@@ -13,13 +14,18 @@ export class ConfigModule {
   static forRoot(): DynamicModule {
     return {
       module: ConfigModule,
-      imports: [AppConfig, NetworkConfig, AuthConfig, DbConfig].map((schema) =>
+      imports: [
+        AppConfig,
+        NetworkConfig,
+        AuthConfig,
+        DbConfig,
+        KakaoApiConfig,
+      ].map((schema) =>
         TypedConfigModule.forRoot({
           schema,
           load: dotenvLoader({
             keyTransformer: (key) => key.toLowerCase(),
             ignoreEnvFile: env.NODE_ENV === 'production',
-            envFilePath: '.local.env',
             expandVariables: true,
           }),
         }),
