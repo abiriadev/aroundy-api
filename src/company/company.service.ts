@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 
-interface Company {
+export interface Company {
   id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -9,7 +9,7 @@ interface Company {
   logo: string;
 }
 
-interface CreateCompany {
+export interface CreateCompany {
   name: string;
   logo: string;
 }
