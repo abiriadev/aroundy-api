@@ -1,0 +1,14 @@
+services:
+  api:
+    build: .
+    restart: 'no'
+    ports:
+      - $PORT:$PORT
+    profiles:
+      - api
+    depends_on:
+      - db
+  db:
+    restart: 'no'
+    ports:
+      - 5432:5432
