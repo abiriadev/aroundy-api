@@ -60,5 +60,5 @@ export class DbConfig {
 
 export class KakaoApiConfig {
   @IsString()
-  kakaoApiKey: string;
+  kakao_api_key: string;
 }
