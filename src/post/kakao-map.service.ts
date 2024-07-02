@@ -69,9 +69,12 @@ export class KakaoMapService {
     if (res.data.documents.length === 0) return null;
 
     const [{ road_address, address }] = res.data.documents;
-    if (!(road_address && address)) return null;
+    if (!(road_address ?? address)) return null;
 
-    const { address_name, region_1depth_name } = road_address ?? address;
+    const { address_name, region_1depth_name } = (road_address ?? address) as {
+      address_name: string;
+      region_1depth_name: string;
+    };
 
     return {
       address: address_name,
