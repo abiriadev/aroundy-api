@@ -1,15 +1,24 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DB_URL")
+}
+
 generator client {
     provider = "prisma-client-js"
 }
 
-generator dbml {
-  provider = "prisma-dbml-generator"
-  projectName = "Aroundy"
+generator kysely {
+    provider = "prisma-kysely"
+    output   = "kysely"
 }
 
-datasource db {
-    provider = "postgresql"
-    url      = env("DB_URL")
+generator dbml {
+    provider    = "prisma-dbml-generator"
+    projectName = "Aroundy"
+}
+
+generator docs {
+    provider = "node node_modules/prisma-docs-generator"
 }
 
 // NOTE: Phase 1.5
@@ -117,7 +126,6 @@ model Tag {
 
     name String @unique
 
-    // referenced relations
-    postId String?
-    post   Post?   @relation(fields: [postId], references: [id])
+    // owned relations
+    post Post[]
 }
