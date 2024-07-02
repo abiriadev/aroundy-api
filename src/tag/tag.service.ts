@@ -6,9 +6,9 @@ import { CreateTagDto } from './tag.dto';
 export class TagService {
   constructor(private prismaService: PrismaService) {}
 
-  async create(category: CreateTagDto) {
-    await this.prismaService.category.create({
-      data: category,
+  async create(tag: CreateTagDto) {
+    await this.prismaService.tag.create({
+      data: tag,
     });
   }
 }
