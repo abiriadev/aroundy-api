@@ -15,7 +15,7 @@ async function main() {
       }),
     ),
     ...tags.map((name) =>
-      prisma.category.upsert({
+      prisma.tag.upsert({
         where: { name },
         update: { name },
         create: { name },
