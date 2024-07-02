@@ -2,6 +2,11 @@ generator client {
     provider = "prisma-client-js"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+  projectName = "Aroundy"
+}
+
 datasource db {
     provider = "postgresql"
     url      = env("DB_URL")
