@@ -66,11 +66,11 @@ model Post {
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 
-    title        String                @db.VarChar(16)
+    title        String                                @db.VarChar(16)
     feeds        String[]
-    caption      String                @db.VarChar(2200)
+    caption      String                                @db.VarChar(2200)
     channel      Channel
-    location     Unsupported("point")?
+    location     Unsupported("geometry(point, 4326)")?
     locationText String?
     region       String?
     branch       String?
