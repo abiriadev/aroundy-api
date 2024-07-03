@@ -47,15 +47,15 @@ importers:
       prisma-extension-kysely:
         specifier: ^2.1.0
         version: 2.1.0(@prisma/client@5.16.1(prisma@5.16.1))
-      prisma-kysely:
-        specifier: ^1.8.0
-        version: 1.8.0
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
       rxjs:
         specifier: ^7.8.1
         version: 7.8.1
+      ts-pattern:
+        specifier: ^5.2.0
+        version: 5.2.0
     devDependencies:
       '@nestjs/cli':
         specifier: ^10.0.0
@@ -111,6 +111,9 @@ importers:
       prisma-docs-generator:
         specifier: ^0.8.0
         version: 0.8.0
+      prisma-kysely:
+        specifier: ^1.8.0
+        version: 1.8.0
       supertest:
         specifier: ^6.3.3
         version: 6.3.4
@@ -3901,6 +3904,9 @@ packages:
 
   ts-pattern@4.3.0:
     resolution: {integrity: sha512-pefrkcd4lmIVR0LA49Imjf9DYLK8vtWhqBPA3Ya1ir8xCW0O2yjL9dsCVvI7pCodLC5q7smNpEtDR2yVulQxOg==}
+
+  ts-pattern@5.2.0:
+    resolution: {integrity: sha512-aGaSpOlDcns7ZoeG/OMftWyQG1KqPVhgplhJxNCvyIXqWrumM5uIoOSarw/hmmi/T1PnuQ/uD8NaFHvLpHicDg==}
 
   ts-toolbelt@9.6.0:
     resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
@@ -8756,6 +8762,8 @@ snapshots:
     optional: true
 
   ts-pattern@4.3.0: {}
+
+  ts-pattern@5.2.0: {}
 
   ts-toolbelt@9.6.0: {}
 
