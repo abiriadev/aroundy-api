@@ -17,7 +17,10 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-    'camelcase': ['warn', { properties: 'never', 'ignoreGlobals': true, "ignoreDestructuring": true }], // 카멜케이스 경고
+    camelcase: [
+      'warn',
+      { properties: 'never', ignoreGlobals: true, ignoreDestructuring: true },
+    ], // 카멜케이스 경고
     '@typescript-eslint/interface-name-prefix': 'off', // 인터페이스 이름 접두어 비활성화
     '@typescript-eslint/explicit-function-return-type': 'off', // 명시적 함수 반환 타입 비활성화
     '@typescript-eslint/explicit-module-boundary-types': 'off', // 명시적 모듈 경계 타입 비활성화
