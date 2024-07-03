@@ -1,42 +1,64 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Post } from './post.entity';
+import { CreatePostDto, channelToPrisma, onOffLineFlags } from './post.dto';
+import { ExtendedPrismaService } from 'src/prisma.config';
+import { KakaoMapService } from './kakao-map.service';
+import { sql } from 'kysely';
+import { StPoint } from 'prisma/kysely/types.unsupported';
 
 @Injectable()
 export class PostService {
   constructor(
-    @InjectRepository(Post)
-    private readonly postRepository: Repository<Post>,
+    private readonly prismaService: ExtendedPrismaService,
+    private readonly kakaoMapService: KakaoMapService,
   ) {}
 
-  async findAll(): Promise<Post[]> {
-    return this.postRepository.find();
-  }
+  async create({
+    title,
+    feeds,
+    caption,
+    channel,
+    location,
+    branch,
+    contact,
+    publishedAt,
+    startedAt,
+    endedAt,
+    link,
+    categoryId,
+    companyId,
+  }: CreatePostDto) {
+    const resolvedAddress =
+      await this.kakaoMapService.coordinateToAddress(location);
+    if (!resolvedAddress) {
+      throw new Error('Invalid location');
+    }
 
-  async findOne(id: string): Promise<Post> {
-    return this.postRepository.findOne({ where: { id } });
-  }
+    const { address, region } = resolvedAddress;
+    const [lat, lng] = location;
+    const { isOnline, isOffline } = onOffLineFlags(channel);
 
-  async create(post: Post): Promise<Post> {
-    return this.postRepository.save(post);
-  }
-
-  async update(id: string, post: Post): Promise<Post> {
-    await this.postRepository.update(id, post);
-    return this.postRepository.findOne({ where: { id } });
-  }
-
-  async remove(id: string): Promise<Post> {
-    const post = await this.postRepository.findOne({ where: { id } });
-    await this.postRepository.delete(id);
-    return post;
-  }
-
-  async addImages(id: string, images: string[]): Promise<Post> {
-    const post = await this.postRepository.findOne({ where: { id } });
-    post.feed_urls = [...(post.feed_urls || []), ...images];
-    await this.postRepository.save(post);
-    return post;
+    await this.prismaService.client.$kysely
+      .insertInto('Post')
+      .values({
+        updatedAt: new Date(),
+        title,
+        feeds,
+        caption,
+        channel: channelToPrisma[channel],
+        location: sql<StPoint>`st_makepoint(${lat}, ${lng})`,
+        locationText: address,
+        region: region,
+        branch,
+        contact,
+        publishedAt,
+        startedAt,
+        endedAt,
+        link,
+        categoryId,
+        companyId,
+        isOnline,
+        isOffline,
+      })
+      .execute();
   }
 }
