@@ -6,7 +6,6 @@ import { TagModule } from './tag/tag.module';
 import { PrismaModule } from 'nestjs-prisma';
 import { prismaConfig } from './prisma.config';
 import { ConfigModule } from './config/config.module';
-import { KakaoMapService } from './kakao-map/kakao-map.service';
 
 @Module({
   imports: [
@@ -17,6 +16,5 @@ import { KakaoMapService } from './kakao-map/kakao-map.service';
     CategoryModule,
     TagModule,
   ],
-  providers: [KakaoMapService],
 })
 export class AppModule {}
