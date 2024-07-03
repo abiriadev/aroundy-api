@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/swagger';
-import { CompanyDto } from 'src/company/company.dto';
-import { TagDto } from 'src/tag/tag.dto';
+import { CompanyDto } from '@/company/company.dto';
+import { TagDto } from '@/tag/tag.dto';
 import { match } from 'ts-pattern';
 
 export type Coordinate = [number, number];

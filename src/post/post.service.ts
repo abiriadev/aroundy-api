@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto, channelToPrisma, onOffLineFlags } from './post.dto';
-import { ExtendedPrismaService } from 'src/prisma.config';
+import { ExtendedPrismaService } from '@/prisma.config';
 import { KakaoMapService } from './kakao-map.service';
 import { sql } from 'kysely';
-import { StPoint } from 'prisma/kysely/types.unsupported';
-import { Post } from 'prisma/kysely/types';
+import { StPoint } from '@/kysely/types.unsupported';
+import { Post } from '@/kysely/types';
 
 @Injectable()
 export class PostService {

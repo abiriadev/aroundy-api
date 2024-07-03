@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { KakaoMapService } from './kakao-map.service';
 import { HttpModule } from '@nestjs/axios';
-import { ConfigModule } from 'src/config/config.module';
+import { ConfigModule } from '@/config/config.module';
 import { Coordinate } from './post.dto';
 
 describe('KakaoMapService', () => {
