@@ -43,6 +43,8 @@ export type Post = {
   feeds: string[];
   caption: string;
   channel: Channel;
+  isOnline: boolean;
+  isOffline: boolean;
   location: StPoint;
   locationText: string | null;
   region: string | null;

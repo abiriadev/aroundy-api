@@ -71,6 +71,8 @@ model Post {
     feeds        String[]
     caption      String                                @db.VarChar(2200)
     channel      Channel
+    isOnline     Boolean
+    isOffline    Boolean
     location     Unsupported("geometry(point, 4326)")?
     locationText String?
     region       String?
