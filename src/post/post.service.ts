@@ -50,20 +50,22 @@ export class PostService {
       };
     }
 
-    const { isOnline, isOffline } = onOffLineFlags(channel);
-
     await this.prismaService.client.$kysely
       .insertInto('Post')
       .values({
         // prisma engine immitation
         updatedAt: new Date(),
+
         title,
         feeds,
         caption,
+
+        // make location-related columns optional at once
         channel: channelToPrisma[channel],
         location: locationColumns?.location,
         locationText: locationColumns?.locationText,
         region: locationColumns?.region,
+
         branch,
         contact,
         publishedAt,
@@ -72,8 +74,8 @@ export class PostService {
         link,
         categoryId,
         companyId,
-        isOnline,
-        isOffline,
+
+        ...onOffLineFlags(channel),
       })
       .execute();
   }
