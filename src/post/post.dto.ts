@@ -1,5 +1,31 @@
+import { PartialType } from '@nestjs/swagger';
 import { CompanyDto } from 'src/company/company.dto';
 import { TagDto } from 'src/tag/tag.dto';
+
+export enum Channel {
+  Online = 'online',
+  Offline = 'offline',
+  Both = 'both',
+  Branch = 'branch',
+  OnlineBranch = 'online-branch',
+}
+
+// NOTE: temporary solution. We can use prisma generator to generate this enum automatically.
+export const channelToPrisma = {
+  [Channel.Online]: 'ONLINE',
+  [Channel.Offline]: 'OFFLINE',
+  [Channel.Both]: 'BOTH',
+  [Channel.Branch]: 'BRANCH',
+  [Channel.OnlineBranch]: 'ONLINE_BRANCH',
+};
+
+export const prismaToChannel = {
+  ONLINE: Channel.Online,
+  OFFLINE: Channel.Offline,
+  BOTH: Channel.Both,
+  BRANCH: Channel.Branch,
+  ONLINE_BRANCH: Channel.OnlineBranch,
+};
 
 export class BasePostDto {
   title: string;
@@ -33,3 +59,10 @@ export class PostDto extends BasePostDto {
   views: number;
   tags: TagDto;
 }
+
+export class PaginatedPostsDto {
+  items: Array<PostDto>;
+  cursor: string | null;
+}
+
+export class UpdatePostDto extends PartialType(CreatePostDto) {}
