@@ -17,7 +17,7 @@ export const channelToPrisma = {
   [Channel.Both]: 'BOTH',
   [Channel.Branch]: 'BRANCH',
   [Channel.OnlineBranch]: 'ONLINE_BRANCH',
-};
+} as const;
 
 export const prismaToChannel = {
   ONLINE: Channel.Online,
@@ -25,7 +25,7 @@ export const prismaToChannel = {
   BOTH: Channel.Both,
   BRANCH: Channel.Branch,
   ONLINE_BRANCH: Channel.OnlineBranch,
-};
+} as const;
 
 export class BasePostDto {
   title: string;
