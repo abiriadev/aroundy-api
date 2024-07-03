@@ -1,6 +1,7 @@
 import { PartialType } from '@nestjs/swagger';
 import { CompanyDto } from 'src/company/company.dto';
 import { TagDto } from 'src/tag/tag.dto';
+import { match } from 'ts-pattern';
 
 export type Coordinate = [number, number];
 
@@ -29,6 +30,20 @@ export const prismaToChannel = {
   ONLINE_BRANCH: Channel.OnlineBranch,
 } as const;
 
+export interface OnOffLineFlag {
+  isOnline: boolean;
+  isOffline: boolean;
+}
+
+export const onOffLineFlags = (channel: Channel): OnOffLineFlag =>
+  match(channel)
+    .with(Channel.Online, () => ({ isOnline: true, isOffline: false }))
+    .with(Channel.Offline, () => ({ isOnline: false, isOffline: true }))
+    .with(Channel.Both, () => ({ isOnline: true, isOffline: true }))
+    .with(Channel.Branch, () => ({ isOnline: false, isOffline: true }))
+    .with(Channel.OnlineBranch, () => ({ isOnline: true, isOffline: true }))
+    .exhaustive();
+
 export class BasePostDto {
   title: string;
   feeds: Array<string>;
@@ -44,12 +59,12 @@ export class BasePostDto {
 }
 
 export class CreatePostDto extends BasePostDto {
-  categoryIds: Array<string>;
-  companyIds: Array<string>;
+  categoryId: string;
+  companyId: string;
   tagIds: Array<string>;
 }
 
-export class PostDto extends BasePostDto {
+export class PostDto extends BasePostDto implements OnOffLineFlag {
   id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -60,6 +75,8 @@ export class PostDto extends BasePostDto {
   likes: number;
   views: number;
   tags: TagDto;
+  isOnline: boolean;
+  isOffline: boolean;
 }
 
 export class PaginatedPostsDto {
