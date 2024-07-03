@@ -79,8 +79,8 @@ model Post {
     startedAt    DateTime?
     endedAt      DateTime?
     link         String?
-    likes        Int // TODO: will have a relation with User later
-    views        Int
+    likes        Int                                   @default(0) // TODO: will have a relation with User later
+    views        Int                                   @default(0)
 
     // owned relations
     tags Tag[]

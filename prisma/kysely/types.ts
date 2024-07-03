@@ -52,8 +52,8 @@ export type Post = {
   startedAt: Timestamp | null;
   endedAt: Timestamp | null;
   link: string | null;
-  likes: number;
-  views: number;
+  likes: Generated<number>;
+  views: Generated<number>;
   categoryId: string;
   companyId: string;
 };
