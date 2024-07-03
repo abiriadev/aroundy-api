@@ -31,7 +31,7 @@ export class BasePostDto {
   title: string;
   feeds: Array<string>;
   caption: string;
-  channel: string;
+  channel: Channel;
   location: [number, number];
   branch: string | null;
   contact: string | null;
