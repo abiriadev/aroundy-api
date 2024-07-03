@@ -2,6 +2,8 @@ import { PartialType } from '@nestjs/swagger';
 import { CompanyDto } from 'src/company/company.dto';
 import { TagDto } from 'src/tag/tag.dto';
 
+export type Coordinate = [number, number];
+
 export enum Channel {
   Online = 'online',
   Offline = 'offline',
@@ -32,7 +34,7 @@ export class BasePostDto {
   feeds: Array<string>;
   caption: string;
   channel: Channel;
-  location: [number, number];
+  location: Coordinate;
   branch: string | null;
   contact: string | null;
   publishedAt: Date;

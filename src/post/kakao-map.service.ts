@@ -2,10 +2,9 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { KakaoApiConfig } from 'src/config/config.service';
+import { Coordinate } from './post.dto';
 
 // NOTE: https://developers.kakao.com/docs/latest/ko/local/dev-guide#coord-to-address
-
-export type Coordinate = [number, number];
 
 export interface Address {
   address: string;
