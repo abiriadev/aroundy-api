@@ -8,7 +8,7 @@ else
 	import="import { StPoint } from './types.unsupported'"
 	body="$(cat "$file")"
 	lookup='locationText:\ string\ |\ null'
-	inject='location:\ StPoint'
+	inject='location:\ StPoint\ |\ null'
 	injected_body="$(echo "$body" | sed "s/$lookup/$inject\n$lookup/")"
 	echo -e "$header\n$import\n$injected_body" >"$file"
 fi
