@@ -4,6 +4,7 @@ import { ExtendedPrismaService } from 'src/prisma.config';
 import { KakaoMapService } from './kakao-map.service';
 import { sql } from 'kysely';
 import { StPoint } from 'prisma/kysely/types.unsupported';
+import { Post } from 'prisma/kysely/types';
 
 @Injectable()
 export class PostService {
@@ -27,27 +28,42 @@ export class PostService {
     categoryId,
     companyId,
   }: CreatePostDto) {
-    const resolvedAddress =
-      await this.kakaoMapService.coordinateToAddress(location);
-    if (!resolvedAddress) {
-      throw new Error('Invalid location');
+    let locationColumns: null | Pick<
+      Post,
+      'location' | 'locationText' | 'region'
+    > = null;
+
+    if (location) {
+      const resolvedAddress =
+        await this.kakaoMapService.coordinateToAddress(location);
+      if (!resolvedAddress) {
+        throw new Error('Invalid location');
+      }
+
+      const { address, region } = resolvedAddress;
+      const [lat, lng] = location;
+
+      locationColumns = {
+        location: sql<StPoint>`st_makepoint(${lat}, ${lng})`,
+        locationText: address,
+        region,
+      };
     }
 
-    const { address, region } = resolvedAddress;
-    const [lat, lng] = location;
     const { isOnline, isOffline } = onOffLineFlags(channel);
 
     await this.prismaService.client.$kysely
       .insertInto('Post')
       .values({
+        // prisma engine immitation
         updatedAt: new Date(),
         title,
         feeds,
         caption,
         channel: channelToPrisma[channel],
-        location: sql<StPoint>`st_makepoint(${lat}, ${lng})`,
-        locationText: address,
-        region: region,
+        location: locationColumns?.location,
+        locationText: locationColumns?.locationText,
+        region: locationColumns?.region,
         branch,
         contact,
         publishedAt,
