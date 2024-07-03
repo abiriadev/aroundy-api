@@ -8,8 +8,9 @@ generator client {
 }
 
 generator kysely {
-    provider = "prisma-kysely"
-    output   = "kysely"
+    provider  = "prisma-kysely"
+    camelCase = true
+    output    = "kysely"
 }
 
 generator dbml {
@@ -61,7 +62,7 @@ model User {
 
 model Post {
     // inherited fields
-    id        String    @id @default(uuid())
+    id        String    @id @default(dbgenerated("gen_random_uuid()")) // see https://www.prisma.io/docs/orm/reference/prisma-schema-reference#default
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?

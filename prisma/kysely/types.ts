@@ -35,7 +35,7 @@ export type Company = {
   logo: string;
 };
 export type Post = {
-  id: string;
+  id: Generated<string>;
   createdAt: Generated<Timestamp>;
   updatedAt: Timestamp;
   deletedAt: Timestamp | null;
