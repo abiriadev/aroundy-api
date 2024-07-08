@@ -42,8 +42,6 @@ export type ExtendedPrismaClient = ReturnType<
   typeof extendedPrismaClientFactory
 >;
 
-export type ExtendedPrismaService = CustomPrismaService<ExtendedPrismaClient>;
-
 export const prismaConfig = {
   name: 'PrismaService',
   imports: [ConfigModule],

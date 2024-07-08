@@ -4,7 +4,7 @@ import {
   PaginatedCompaniesDto,
   UpdateCompanyDto,
 } from './company.dto';
-import { ExtendedPrismaService } from '@/prisma.config';
+import { ExtendedPrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
 export class CompanyService {

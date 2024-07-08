@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CustomPrismaModule } from 'nestjs-prisma';
 import { CompanyService } from './company.service';
-import { prismaConfig } from '@/prisma.config';
 import { ConfigModule } from '@/config/config.module';
+import { PrismaModule } from '@/prisma/prisma.module';
 
 describe('CompanyService', () => {
   let service: CompanyService;
@@ -10,8 +9,8 @@ describe('CompanyService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        ConfigModule.forRoot(),
-        CustomPrismaModule.forRootAsync(prismaConfig),
+        // ConfigModule.forRoot(),
+        PrismaModule,
       ],
       providers: [CompanyService],
     }).compile();
