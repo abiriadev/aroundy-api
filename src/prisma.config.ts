@@ -2,11 +2,11 @@ import {
   CustomPrismaModuleAsyncOptions,
   CustomPrismaService,
 } from 'nestjs-prisma';
-import { DbConfig } from './config/config.service';
-import { ConfigModule } from './config/config.module';
+import { DbConfig } from '@/config/config.service';
+import { ConfigModule } from '@/config/config.module';
 import kyselyExtension from 'prisma-extension-kysely';
 import { PrismaClient } from '@prisma/client';
-import type { DB } from '../prisma/kysely/types';
+import type { DB } from '@/kysely/types';
 import {
   Kysely,
   PostgresAdapter,
@@ -14,9 +14,15 @@ import {
   PostgresQueryCompiler,
 } from 'kysely';
 
-const extendedPrismaClientFactory = (dbConfigService: DbConfig) =>
+const extendedPrismaClientFactory = ({
+  db_host,
+  db_user,
+  db_port,
+  db_password,
+  db_database,
+}: DbConfig) =>
   new PrismaClient({
-    datasourceUrl: `postgresql://${dbConfigService.db_user}:${dbConfigService.db_password}@${dbConfigService.db_host}:${dbConfigService.db_port}/${dbConfigService.db_database}`,
+    datasourceUrl: `postgresql://${db_user}:${db_password}@${db_host}:${db_port}/${db_database}`,
   }).$extends(
     kyselyExtension({
       kysely: (driver) =>
