@@ -6,8 +6,11 @@ import { CreateCategoryDto } from './category.dto';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  /**
+   * 카테고리 추가.
+   */
   @Post()
-  create(@Body() category: CreateCategoryDto) {
-    return this.categoryService.create(category);
+  async create(@Body() category: CreateCategoryDto) {
+    await this.categoryService.create(category);
   }
 }
