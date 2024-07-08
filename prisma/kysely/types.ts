@@ -45,7 +45,7 @@ export type Post = {
   channel: Channel;
   isOnline: boolean;
   isOffline: boolean;
-  location: StPoint;
+  location: StPoint | null;
   locationText: string | null;
   region: string | null;
   branch: string | null;
