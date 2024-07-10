@@ -83,7 +83,7 @@ export class PostController {
   }
 
   /**
-   * 해당 포스트를 북마크에 추가합니다.
+   * 해당 포스트를 북마크에서 삭제합니다.
    */
   @Delete(':id/save')
   @ApiOperation({ summary: '포스트 북마크 삭제' })
