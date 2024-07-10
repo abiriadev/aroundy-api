@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostController } from './post.controller';
-import { PrismaModule } from 'nestjs-prisma';
 import { KakaoMapService } from './kakao-map.service';
 import { HttpModule } from '@nestjs/axios';
-import { ConfigModule } from '@/config/config.module';
+import { PrismaModule } from '@/prisma/prisma.module';
 
 @Module({
-  imports: [ConfigModule, PrismaModule, HttpModule],
+  imports: [PrismaModule, HttpModule],
   providers: [PostService, KakaoMapService],
   controllers: [PostController],
 })
