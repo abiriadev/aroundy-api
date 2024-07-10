@@ -11,6 +11,7 @@ import { PostService } from './post.service';
 import { PostDto } from './post.dto';
 import { Identifiable } from '@/common/identifiable.dto';
 import { ApiOperation } from '@nestjs/swagger';
+import { UserId } from '@/roles.guard';
 
 @Controller('posts')
 export class PostController {
@@ -43,6 +44,51 @@ export class PostController {
   @ApiOperation({ summary: '포스트 수정' })
   async update(@Param() { id }: Identifiable, @Body() post: PostDto.Update) {
     return this.postService.update(id, post);
+  }
+
+  /**
+   * 해당 포스트의 조회수를 1 증가시킵니다.
+   */
+  @Patch(':id/view')
+  @ApiOperation({ summary: '포스트 조회수 증가' })
+  async view(@Param() { id }: Identifiable) {
+    return this.postService.view(id);
+  }
+
+  /**
+   * 해당 포스트에 좋아요를 누릅니다.
+   */
+  @Post(':id/like')
+  @ApiOperation({ summary: '포스트 좋아요 추가' })
+  async like(@UserId() userId: string, @Param() { id }: Identifiable) {
+    return this.postService.like(id, userId);
+  }
+
+  /**
+   * 해당 포스트에 좋아요를 취소합니다.
+   */
+  @Delete(':id/like')
+  @ApiOperation({ summary: '포스트 좋아요 삭제' })
+  async unlike(@UserId() userId: string, @Param() { id }: Identifiable) {
+    return this.postService.unlike(id, userId);
+  }
+
+  /**
+   * 해당 포스트를 북마크에 추가합니다.
+   */
+  @Post(':id/save')
+  @ApiOperation({ summary: '포스트 북마크 저장' })
+  async save(@UserId() userId: string, @Param() { id }: Identifiable) {
+    return this.postService.save(id, userId);
+  }
+
+  /**
+   * 해당 포스트를 북마크에 추가합니다.
+   */
+  @Delete(':id/save')
+  @ApiOperation({ summary: '포스트 북마크 삭제' })
+  async unsave(@UserId() userId: string, @Param() { id }: Identifiable) {
+    return this.postService.unsave(id, userId);
   }
 
   /**
