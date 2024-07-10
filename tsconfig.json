@@ -10,9 +10,8 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "strictBindCallApply": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
     "forceConsistentCasingInFileNames": true,
     "paths": {
       "@/*": ["./src/*"],
