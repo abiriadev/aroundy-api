@@ -3,7 +3,11 @@ import { IsDate, IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
 
 export class QueryDto {
   /**
-   * 검색어
+   * 기업 검색에 사용할 검색어
+   *
+   * 리얼타임 검색 UI를 위해 존재합니다.
+   *
+   * @example 스타벅
    */
   @IsString()
   @IsOptional()
@@ -11,8 +15,12 @@ export class QueryDto {
 }
 
 export class CompanyDto {
+  static name = 'Company';
+
   /**
    * 회사 고유 ID
+   *
+   * @example 429b20b3-4df8-42da-8e40-e3816504792c
    */
   @IsUUID()
   id: string;
@@ -33,12 +41,16 @@ export class CompanyDto {
    * 회사명 또는 법인명.
    *
    * 모든 회사는 고유한 이름을 가지며, 중복될 수 없습니다.
+   *
+   * @example Aroundy
    */
   @IsString()
   name: string;
 
   /**
    * 회사 로고 이미지 URL
+   *
+   * @example https://example.com/logo.png
    */
   @IsUrl()
   @IsOptional()
@@ -50,7 +62,11 @@ export namespace CompanyDto {
     'id',
     'createdAt',
     'updatedAt',
-  ] as const) {}
+  ] as const) {
+    static name = 'Company Create';
+  }
 
-  export class Update extends PartialType(Create) {}
+  export class Update extends PartialType(Create) {
+    static name = 'Company Update';
+  }
 }
