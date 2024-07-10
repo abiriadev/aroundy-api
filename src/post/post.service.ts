@@ -104,4 +104,11 @@ export class PostService {
       },
     });
   }
+
+  async remove(id: string) {
+    await this.prismaService.client.post.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
+  }
 }
