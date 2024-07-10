@@ -22,12 +22,6 @@ generator docs {
     provider = "node node_modules/prisma-docs-generator"
 }
 
-enum Channel {
-    ONLINE
-    OFFLINE
-    BOTH
-}
-
 model User {
     // inherited fields
     createdAt DateTime  @default(now())
@@ -36,40 +30,42 @@ model User {
 
     // auth information
     // NOTE: we do *NOT* store password hash since we are using OAuth
-    uid                String
+    uid                String   @id
     oauthProvider      String // TODO: will be enum
     recentlyLoggedInAt DateTime
 
     // owned relations
     likedPosts Post[] @relation("like")
     savedPosts Post[] @relation("save")
-
-    @@id([uid, oauthProvider])
 }
 
 model Post {
     // inherited fields
-    id        String    @id @default(dbgenerated("gen_random_uuid()")) // see https://www.prisma.io/docs/orm/reference/prisma-schema-reference#default
+    id        String    @id @default(uuid()) // see https://www.prisma.io/docs/orm/reference/prisma-schema-reference#default
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 
-    title        String                                @db.VarChar(16)
-    feeds        String[]
-    caption      String                                @db.VarChar(2200)
-    channel      Channel
-    isOnline     Boolean
-    isOffline    Boolean
-    location     Unsupported("geometry(point, 4326)")?
-    locationText String?
-    region       String?
-    branch       String?
-    contact      String?
-    publishedAt  DateTime
-    startedAt    DateTime?
-    endedAt      DateTime?
-    link         String?
-    views        Int                                   @default(0)
+    // common information
+    title       String    @db.VarChar(16)
+    feeds       String[]
+    caption     String    @db.VarChar(2200)
+    contact     String?
+    publishedAt DateTime
+    startedAt   DateTime?
+    endedAt     DateTime?
+    link        String?
+    views       Int       @default(0)
+
+    // event type and geolocation related fields
+    isOnline  Boolean
+    isOffline Boolean
+    lat       Float?
+    lng       Float?
+    address1  String?
+    address2  String?
+    region    String?
+    branch    String?
 
     // owned relations
     tags       Tag[]
@@ -90,8 +86,8 @@ model Company {
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 
-    name String @unique
-    logo String
+    name String  @unique
+    logo String?
 
     // owned relations
     post Post[]

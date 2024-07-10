@@ -9,19 +9,6 @@ export type Timestamp = ColumnType<
 	Date | string
 >
 
-export const Gender = {
-	MALE: 'MALE',
-	FEMALE: 'FEMALE',
-} as const
-export type Gender = (typeof Gender)[keyof typeof Gender]
-export const Channel = {
-	ONLINE: 'ONLINE',
-	OFFLINE: 'OFFLINE',
-	BOTH: 'BOTH',
-	BRANCH: 'BRANCH',
-	ONLINE_BRANCH: 'ONLINE_BRANCH',
-} as const
-export type Channel = (typeof Channel)[keyof typeof Channel]
 export type Category = {
 	id: string
 	createdAt: Generated<Timestamp>
@@ -34,33 +21,42 @@ export type Company = {
 	updatedAt: Timestamp
 	deletedAt: Timestamp | null
 	name: string
-	logo: string
+	logo: string | null
+}
+export type like = {
+	A: string
+	B: string
 }
 export type Post = {
-	id: Generated<string>
+	id: string
 	createdAt: Generated<Timestamp>
 	updatedAt: Timestamp
 	deletedAt: Timestamp | null
 	title: string
 	feeds: string[]
 	caption: string
-	channel: Channel
-	isOnline: boolean
-	isOffline: boolean
-	locationText: string | null
-	region: string | null
-	branch: string | null
 	contact: string | null
 	publishedAt: Timestamp
 	startedAt: Timestamp | null
 	endedAt: Timestamp | null
 	link: string | null
-	likes: Generated<number>
 	views: Generated<number>
+	isOnline: boolean
+	isOffline: boolean
+	lat: number | null
+	lng: number | null
+	address1: string | null
+	address2: string | null
+	region: string | null
+	branch: string | null
 	categoryId: string
 	companyId: string
 }
 export type PostToTag = {
+	A: string
+	B: string
+}
+export type save = {
 	A: string
 	B: string
 }
@@ -71,21 +67,17 @@ export type Tag = {
 	name: string
 }
 export type User = {
-	id: string
 	createdAt: Generated<Timestamp>
 	updatedAt: Timestamp
 	deletedAt: Timestamp | null
-	oauthId: string
+	uid: string
 	oauthProvider: string
 	recentlyLoggedInAt: Timestamp
-	name: string | null
-	gender: Gender | null
-	email: string | null
-	tel: string | null
-	birth: Timestamp | null
 }
 export type DB = {
+	_Like: like
 	_PostToTag: PostToTag
+	_Save: save
 	Category: Category
 	Company: Company
 	Post: Post
