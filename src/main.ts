@@ -5,7 +5,11 @@ import { ConfigService } from '@/config/config.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: {
+      origin: '*',
+    },
+  });
 
   const { port, host } = app.get(ConfigService.Network);
 
@@ -18,6 +22,7 @@ async function bootstrap() {
         .setTitle('Aroundy')
         .setDescription('Aroundy 앱 및 어드민 페이지 공용 API')
         .setVersion('phase1')
+        .addServer(`http://127.0.0.1:${port}`, 'local server')
         .addServer(`https://${host}:${port}`, 'production server')
         .setExternalDoc(
           'Notion',
