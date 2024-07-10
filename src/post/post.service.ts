@@ -77,4 +77,16 @@ export class PostService {
       ...rest,
     }));
   }
+
+  async create(company: PostDto.Create) {
+    const { location, ...rest } = company;
+
+    await this.prismaService.client.post.create({
+      data: {
+        lat: location?.[0],
+        lng: location?.[1],
+        ...rest,
+      },
+    });
+  }
 }
