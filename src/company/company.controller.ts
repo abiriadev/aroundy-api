@@ -11,6 +11,7 @@ import {
 import { CompanyService } from './company.service';
 import { CompanyDto, QueryDto } from './company.dto';
 import { ApiOperation } from '@nestjs/swagger';
+import { Identifiable } from '@/common/identifiable.dto';
 
 @Controller('companies')
 export class CompanyController {
@@ -43,7 +44,10 @@ export class CompanyController {
    */
   @Patch(':id')
   @ApiOperation({ summary: '기업정보 수정' })
-  async update(@Param('id') id: string, @Body() company: CompanyDto.Update) {
+  async update(
+    @Param() { id }: Identifiable,
+    @Body() company: CompanyDto.Update,
+  ) {
     return this.companyService.update(id, company);
   }
 
@@ -54,7 +58,7 @@ export class CompanyController {
    */
   @Delete(':id')
   @ApiOperation({ summary: '기업 탈퇴' })
-  async remove(@Param('id') id: string) {
+  async remove(@Param() { id }: Identifiable) {
     return this.companyService.remove(id);
   }
 }
