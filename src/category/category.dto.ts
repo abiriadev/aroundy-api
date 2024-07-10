@@ -1,4 +1,4 @@
-import { Identifiable } from '@/common/identifiable';
+import { Identifiable } from '@/common/identifiable.dto';
 import { OmitType } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 
@@ -7,6 +7,8 @@ export class CategoryDto extends Identifiable {
 
   /**
    * 카테고리 이름
+   *
+   * @example 팝업스토어
    */
   @IsString()
   name: string;

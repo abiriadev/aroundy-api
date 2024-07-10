@@ -1,4 +1,4 @@
-import { Identifiable } from '@/common/identifiable';
+import { Identifiable } from '@/common/identifiable.dto';
 import { OmitType, PartialType } from '@nestjs/swagger';
 import { IsDate, IsOptional, IsString, IsUrl } from 'class-validator';
 
