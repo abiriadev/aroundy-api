@@ -22,6 +22,8 @@ export class CategoryController {
 
   /**
    * 주어진 이름으로 새 카테고리를 생성합니다.
+   *
+   * 같은 이름의 카테고리가 이미 존재하는 경우, 예외가 발생합니다.
    */
   @Post()
   @ApiOperation({ summary: '카테고리 추가' })
