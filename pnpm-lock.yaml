@@ -26,7 +26,7 @@ dependencies:
   '@swc/core':
     specifier: ^1.6.6
     version: 1.6.13
-  change-case:
+  change-case-commonjs:
     specifier: ^5.4.4
     version: 5.4.4
   class-transformer:
@@ -2965,8 +2965,8 @@ packages:
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
     dev: true
 
-  /change-case@5.4.4:
-    resolution: {integrity: sha512-HRQyTk2/YPEkt9TnUPbOpr64Uw3KOicFWPVBb+xiHvd6eBx/qPr9xqfBFDT8P2vWsvvz4jbEkfDe71W3VyNu2w==}
+  /change-case-commonjs@5.4.4:
+    resolution: {integrity: sha512-b9kVAvkOzngdK/JIMSqP1TixZ4lDvYwk+Lh+EL1+tYjQCp6FCLVQe/VmjwlYXt7MQsvlLaUdX6gJNEsRlQlwlw==}
     dev: false
 
   /char-regex@1.0.2:
