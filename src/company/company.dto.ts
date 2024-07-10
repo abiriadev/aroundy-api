@@ -1,5 +1,5 @@
 import { OmitType, PartialType } from '@nestjs/swagger';
-import { IsDate, IsString, IsUrl, IsUUID } from 'class-validator';
+import { IsDate, IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
 
 export class CompanyDto {
   /**
@@ -32,6 +32,7 @@ export class CompanyDto {
    * 회사 로고 이미지 URL
    */
   @IsUrl()
+  @IsOptional()
   logo: string | null;
 }
 
