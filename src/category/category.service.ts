@@ -6,7 +6,7 @@ import { CategoryDto } from './category.dto';
 export class CategoryService {
   constructor(private prismaService: PrismaService) {}
 
-  async findAll() {
+  async fetch() {
     return await this.prismaService.category.findMany({
       select: {
         id: true,

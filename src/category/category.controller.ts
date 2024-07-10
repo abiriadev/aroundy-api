@@ -15,9 +15,9 @@ export class CategoryController {
    * 기본적으로 각 카테고리가 생성된 순서대로 정렬되어 반환됩니다.
    */
   @Get()
-  @ApiOperation({ summary: '카테고리 조회' })
-  async findAll(): Promise<Array<CategoryDto>> {
-    return await this.categoryService.findAll();
+  @ApiOperation({ summary: '카테고리 목록 조회' })
+  async fetch(): Promise<Array<CategoryDto>> {
+    return await this.categoryService.fetch();
   }
 
   /**
