@@ -16,7 +16,7 @@ export class TagController {
    */
   @Get()
   @ApiOperation({ summary: '태그 목록 조회' })
-  async fetch() {
+  async fetch(): Promise<Array<TagDto>> {
     return this.TagService.fetch();
   }
 

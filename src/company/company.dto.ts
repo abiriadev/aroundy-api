@@ -1,5 +1,6 @@
+import { Identifiable } from '@/common/identifiable';
 import { OmitType, PartialType } from '@nestjs/swagger';
-import { IsDate, IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
+import { IsDate, IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class QueryDto {
   /**
@@ -14,16 +15,8 @@ export class QueryDto {
   q: string;
 }
 
-export class CompanyDto {
+export class CompanyDto extends Identifiable {
   static name = 'Company';
-
-  /**
-   * 회사 고유 ID
-   *
-   * @example 429b20b3-4df8-42da-8e40-e3816504792c
-   */
-  @IsUUID()
-  id: string;
 
   /**
    * 회사 등록일

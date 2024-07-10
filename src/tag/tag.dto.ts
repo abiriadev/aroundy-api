@@ -1,12 +1,9 @@
+import { Identifiable } from '@/common/identifiable';
 import { OmitType } from '@nestjs/swagger';
-import { IsString, IsUUID } from 'class-validator';
+import { IsString } from 'class-validator';
 
-export class TagDto {
-  /**
-   * 태그 고유 ID
-   */
-  @IsUUID()
-  id: string;
+export class TagDto extends Identifiable {
+  static name = 'Tag';
 
   /**
    * 태그명
@@ -16,5 +13,7 @@ export class TagDto {
 }
 
 export namespace TagDto {
-  export class Create extends OmitType(TagDto, ['id'] as const) {}
+  export class Create extends OmitType(TagDto, ['id'] as const) {
+    static name = 'Tag Create';
+  }
 }
