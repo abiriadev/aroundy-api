@@ -22,46 +22,29 @@ generator docs {
     provider = "node node_modules/prisma-docs-generator"
 }
 
-// NOTE: Phase 1.5
-enum Gender {
-    MALE
-    FEMALE
-}
-
 enum Channel {
     ONLINE
     OFFLINE
     BOTH
-    BRANCH
-    ONLINE_BRANCH
 }
 
-// NOTE: Phase 1.5
-// may change a lot later
 model User {
     // inherited fields
-    id        String    @id @default(uuid())
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
 
     // auth information
     // NOTE: we do *NOT* store password hash since we are using OAuth
-    oauthId            String   @unique
+    uid                String
     oauthProvider      String // TODO: will be enum
     recentlyLoggedInAt DateTime
 
-    // personal information
-    // all fields optional for now
-    name   String?
-    gender Gender?
-    email  String?   @unique
-    tel    String?   @unique
-    birth  DateTime?
-
     // owned relations
-    likedPosts Post[]
-    savedPosts Post[]
+    likedPosts Post[] @relation("like")
+    savedPosts Post[] @relation("save")
+
+    @@id([uid, oauthProvider])
 }
 
 model Post {
@@ -90,8 +73,8 @@ model Post {
 
     // owned relations
     tags       Tag[]
-    likedUsers User[]
-    savedUsers User[]
+    likedUsers User[] @relation("like")
+    savedUsers User[] @relation("save")
 
     // referenced relations
     categoryId String
