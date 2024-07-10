@@ -65,22 +65,22 @@ export class PostDto extends Identifiable {
   /**
    * 오프라인 행사일 경우, 행사가 진행되는 특정한 위치의 좌표를 나타냅니다.
    */
-  location: Coordinate;
+  location: Coordinate | null;
 
   /**
    * `location`이 존재할 경우, 해당 위치의 최상위 지역명을 나타냅니다.
    */
-  address1: string;
+  address1: string | null;
 
   /**
    * `location`이 존재할 경우, 해당 위치의 2차 지역명을 나타냅니다.
    */
-  address2: string;
+  address2: string | null;
 
   /**
    * `location`이 존재할 경우, 해당 위치가 속한 지역을 나타냅니다.
    */
-  region: string;
+  region: string | null;
 
   /**
    * `isOffline`이 `true` 이지만 지점에서 발생하는 이벤트의 경우, 해당 지점의 이름을 나타냅니다.
@@ -145,7 +145,7 @@ export class PostDto extends Identifiable {
   /**
    * 해당 포스트와 연관된 태그 정보입니다.
    */
-  tags: TagDto;
+  tags: Array<TagDto>;
 }
 
 export namespace PostDto {
