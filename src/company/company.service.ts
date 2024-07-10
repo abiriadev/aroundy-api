@@ -9,7 +9,7 @@ export class CompanyService {
     private readonly prismaService: ExtendedPrismaService,
   ) {}
 
-  async findAll({ contains }: { contains?: string }) {
+  async fetch({ contains }: { contains?: string }) {
     return await this.prismaService.client.company.findMany({
       select: {
         id: true,

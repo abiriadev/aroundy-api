@@ -22,8 +22,8 @@ export class CompanyController {
    */
   @Get()
   @ApiOperation({ summary: '기업 목록 조회' })
-  async findAll(@Query() { q }: QueryDto): Promise<Array<CompanyDto>> {
-    return this.companyService.findAll({
+  async fetch(@Query() { q }: QueryDto): Promise<Array<CompanyDto>> {
+    return this.companyService.fetch({
       contains: q,
     });
   }
