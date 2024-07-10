@@ -13,11 +13,6 @@ generator kysely {
     output    = "kysely"
 }
 
-generator dbml {
-    provider    = "prisma-dbml-generator"
-    projectName = "Aroundy"
-}
-
 generator docs {
     provider = "node node_modules/prisma-docs-generator"
 }
