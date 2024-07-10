@@ -27,19 +27,9 @@ export class PostDto extends Identifiable {
   title: string;
 
   /**
-   * 해당 포스트가 속하는 카테고리의 ID.
-   */
-  categoryId: string;
-
-  /**
    * 해당 포스트가 속하는 카테고리의 정보.
    */
   category: CategoryDto;
-
-  /**
-   * 해당 포스트를 등록하는 회사의 ID.
-   */
-  companyId: string;
 
   /**
    * 해당 포스트를 등록한 기업의 정보.
@@ -153,19 +143,42 @@ export class PostDto extends Identifiable {
   saved: boolean;
 
   /**
-   * 해당 포스트가 가질 태그의 ID 목록입니다.
-   */
-  tagIds: Array<string>;
-
-  /**
    * 해당 포스트와 연관된 태그 정보입니다.
    */
   tags: TagDto;
 }
 
 export namespace PostDto {
-  export class Create extends OmitType(PostDto, ['id'] as const) {
+  export class Create extends OmitType(PostDto, [
+    'id',
+    'createdAt',
+    'updatedAt',
+    'category',
+    'company',
+    'address1',
+    'address2',
+    'region',
+    'views',
+    'likes',
+    'liked',
+    'saved',
+    'tags',
+  ] as const) {
     static name = 'Category Create';
+    /**
+     * 해당 포스트가 속하는 카테고리의 ID.
+     */
+    categoryId: string;
+
+    /**
+     * 해당 포스트를 등록하는 회사의 ID.
+     */
+    companyId: string;
+
+    /**
+     * 해당 포스트가 가질 태그의 ID 목록입니다.
+     */
+    tagIds: Array<string>;
   }
 
   export class Update extends PartialType(Create) {}
