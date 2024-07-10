@@ -8,29 +8,24 @@ import {
   Patch,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
-import {
-  CompanyDto,
-  CreateCompanyDto,
-  PaginatedCompaniesDto,
-  UpdateCompanyDto,
-} from './company.dto';
+import { CompanyDto } from './company.dto';
 
 @Controller('companies')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @Get()
-  async findAll(): Promise<PaginatedCompaniesDto> {
+  async findAll(): Promise<Array<CompanyDto>> {
     return this.companyService.findAll({});
   }
 
   @Post()
-  async create(@Body() company: CreateCompanyDto) {
+  async create(@Body() company: CompanyDto.Create) {
     return this.companyService.create(company);
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() company: UpdateCompanyDto) {
+  async update(@Param('id') id: string, @Body() company: CompanyDto.Update) {
     return this.companyService.update(id, company);
   }
 

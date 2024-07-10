@@ -1,19 +1,46 @@
-import { PartialType } from '@nestjs/swagger';
+import { OmitType, PartialType } from '@nestjs/swagger';
+import { IsDate, IsString, IsUrl, IsUUID } from 'class-validator';
 
-export class CreateCompanyDto {
-  name: string;
-  logo: string;
-}
-
-export class CompanyDto extends CreateCompanyDto {
+export class CompanyDto {
+  /**
+   * 회사 고유 ID
+   */
+  @IsUUID()
   id: string;
+
+  /**
+   * 회사 등록일
+   */
+  @IsDate()
   createdAt: Date;
+
+  /**
+   * 회사 정보 갱신일
+   */
+  @IsDate()
   updatedAt: Date;
+
+  /**
+   * 회사명 또는 법인명.
+   *
+   * 모든 회사는 고유한 이름을 가지며, 중복될 수 없습니다.
+   */
+  @IsString()
+  name: string;
+
+  /**
+   * 회사 로고 이미지 URL
+   */
+  @IsUrl()
+  logo: string | null;
 }
 
-export class PaginatedCompaniesDto {
-  items: Array<CompanyDto>;
-  cursor: string | null;
-}
+export namespace CompanyDto {
+  export class Create extends OmitType(CompanyDto, [
+    'id',
+    'createdAt',
+    'updatedAt',
+  ] as const) {}
 
-export class UpdateCompanyDto extends PartialType(CreateCompanyDto) {}
+  export class Update extends PartialType(Create) {}
+}

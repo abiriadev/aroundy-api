@@ -1,9 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import {
-  CreateCompanyDto,
-  PaginatedCompaniesDto,
-  UpdateCompanyDto,
-} from './company.dto';
+import { CompanyDto } from './company.dto';
 import { ExtendedPrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
@@ -13,16 +9,8 @@ export class CompanyService {
     private readonly prismaService: ExtendedPrismaService,
   ) {}
 
-  async findAll({
-    name,
-    cursor,
-    take,
-  }: {
-    name?: string;
-    cursor?: string;
-    take?: number;
-  }): Promise<PaginatedCompaniesDto> {
-    const items = await this.prismaService.client.company.findMany({
+  async findAll({ name }: { name?: string }) {
+    return await this.prismaService.client.company.findMany({
       select: {
         id: true,
         createdAt: true,
@@ -37,28 +25,18 @@ export class CompanyService {
         },
       },
       orderBy: {
-        createdAt: 'desc',
-      },
-      take: take ?? 10,
-      skip: cursor === undefined ? 0 : 1,
-      cursor: {
-        id: cursor,
+        createdAt: 'asc',
       },
     });
-
-    return {
-      items,
-      cursor: items.at(-1)?.id ?? null,
-    };
   }
 
-  async create(company: CreateCompanyDto) {
+  async create(company: CompanyDto.Create) {
     await this.prismaService.client.company.create({
       data: company,
     });
   }
 
-  async update(id: string, company: UpdateCompanyDto) {
+  async update(id: string, company: CompanyDto.Update) {
     await this.prismaService.client.company.update({
       where: { id },
       data: company,
