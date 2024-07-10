@@ -1,87 +1,172 @@
-import { PartialType } from '@nestjs/swagger';
+import { OmitType, PartialType } from '@nestjs/swagger';
 import { CompanyDto } from '@/company/company.dto';
 import { TagDto } from '@/tag/tag.dto';
-import { match } from 'ts-pattern';
+import { Identifiable } from '@/common/identifiable.dto';
+import { CategoryDto } from '@/category/category.dto';
 
 export type Coordinate = [number, number];
 
-export enum Channel {
-  Online = 'online',
-  Offline = 'offline',
-  Both = 'both',
-  Branch = 'branch',
-  OnlineBranch = 'online-branch',
-}
+export class PostDto extends Identifiable {
+  static name = 'Post';
 
-// NOTE: temporary solution. We can use prisma generator to generate this enum automatically.
-export const channelToPrisma = {
-  [Channel.Online]: 'ONLINE',
-  [Channel.Offline]: 'OFFLINE',
-  [Channel.Both]: 'BOTH',
-  [Channel.Branch]: 'BRANCH',
-  [Channel.OnlineBranch]: 'ONLINE_BRANCH',
-} as const;
-
-export const prismaToChannel = {
-  ONLINE: Channel.Online,
-  OFFLINE: Channel.Offline,
-  BOTH: Channel.Both,
-  BRANCH: Channel.Branch,
-  ONLINE_BRANCH: Channel.OnlineBranch,
-} as const;
-
-export interface OnOffLineFlag {
-  isOnline: boolean;
-  isOffline: boolean;
-}
-
-export const onOffLineFlags = (channel: Channel): OnOffLineFlag =>
-  match(channel)
-    .with(Channel.Online, () => ({ isOnline: true, isOffline: false }))
-    .with(Channel.Offline, () => ({ isOnline: false, isOffline: true }))
-    .with(Channel.Both, () => ({ isOnline: true, isOffline: true }))
-    .with(Channel.Branch, () => ({ isOnline: false, isOffline: true }))
-    .with(Channel.OnlineBranch, () => ({ isOnline: true, isOffline: true }))
-    .exhaustive();
-
-export class BasePostDto {
-  title: string;
-  feeds: Array<string>;
-  caption: string;
-  channel: Channel;
-  location: Coordinate;
-  branch: string | null;
-  contact: string | null;
-  publishedAt: Date;
-  startedAt: Date | null;
-  endedAt: Date | null;
-  link: string | null;
-}
-
-export class CreatePostDto extends BasePostDto {
-  categoryId: string;
-  companyId: string;
-  tagIds: Array<string>;
-}
-
-export class PostDto extends BasePostDto implements OnOffLineFlag {
-  id: string;
+  /**
+   * 해당 포스트가 처음으로 생성된 시각.
+   *
+   * 해당 이벤트 광고가 검색에 노출되기 시작하는 예정 시점인 `publishedAt`과 별개입니다.
+   */
   createdAt: Date;
+
+  /**
+   * 해당 포스트가 마지막으로 수정된 시각.
+   */
   updatedAt: Date;
-  categories: Array<string>;
+
+  /**
+   * 해당 포스트의 제목.
+   */
+  title: string;
+
+  /**
+   * 해당 포스트가 속하는 카테고리의 ID.
+   */
+  categoryId: string;
+
+  /**
+   * 해당 포스트가 속하는 카테고리의 정보.
+   */
+  category: CategoryDto;
+
+  /**
+   * 해당 포스트를 등록하는 회사의 ID.
+   */
+  companyId: string;
+
+  /**
+   * 해당 포스트를 등록한 기업의 정보.
+   */
   company: CompanyDto;
-  locationText: string;
-  region: string;
-  likes: number;
-  views: number;
-  tags: TagDto;
+
+  /**
+   * 해당 광고의 슬라이딩 이미지 URL 목록.
+   */
+  feeds: Array<string>;
+
+  /**
+   * 해당 포스트의 캡션, 다시 말해 이벤트 광고의 설명.
+   */
+  caption: string;
+
+  /**
+   * 해당 포스트에서 설명하는 행사가 온라인 행사인지 여부.
+   *
+   * `isOffline`이 `false`인 경우, 본 속성은 반드시 `true`여야 합니다. 역은 성립하지 않습니다.
+   */
   isOnline: boolean;
+
+  /**
+   * 해당 포스트에서 설명하는 행사가 오프라인 행사인지 여부.
+   *
+   * `isOnline`이 `false`인 경우, 본 속성은 반드시 `true`여야 합니다. 역은 성립하지 않습니다.
+   *
+   * 다시 말해, `isOnline`과 `isOffline`은 동시에 `false` 일 수 없습니다.
+   */
   isOffline: boolean;
+
+  /**
+   * 오프라인 행사일 경우, 행사가 진행되는 특정한 위치의 좌표를 나타냅니다.
+   */
+  location: Coordinate;
+
+  /**
+   * `location`이 존재할 경우, 해당 위치의 최상위 지역명을 나타냅니다.
+   */
+  address1: string;
+
+  /**
+   * `location`이 존재할 경우, 해당 위치의 2차 지역명을 나타냅니다.
+   */
+  address2: string;
+
+  /**
+   * `location`이 존재할 경우, 해당 위치가 속한 지역을 나타냅니다.
+   */
+  region: string;
+
+  /**
+   * `isOffline`이 `true` 이지만 지점에서 발생하는 이벤트의 경우, 해당 지점의 이름을 나타냅니다.
+   */
+  branch: string | null;
+
+  /**
+   * 해당 이벤트의 주최측 또는 기업 연락처를 나타냅니다.
+   *
+   * 놀랍게도 이 정보는 앱 피그마에 전혀 등장하지 않는데 하여튼 있습니다. 왜인진 저도 몰?루.
+   */
+  contact: string | null;
+
+  /**
+   * 해당 포스트가 처음으로 검색에 노출되기 시작하는 시각을 나타냅니다.
+   *
+   * 기업은 임의의 시간에 이벤트 포스트를 작성하고 원하는 만큼 수정할 수 있으며, `publishedAt` 속성을 설정함으로써 실제 작성한 이벤트가 언제부터 노출되기 시작할지 결정할 수 있습니다.
+   *
+   * 이벤트 시작일인 `startedAt`과는 별개입니다.
+   */
+  publishedAt: Date;
+
+  /**
+   * 본 포스트에서 설명하는 이벤트가 시작하는 시간을 나타냅니다.
+   */
+  startedAt: Date | null;
+
+  /**
+   * 본 포스트에서 설명하는 이벤트가 종료되는 시간을 나타냅니다.
+   */
+  endedAt: Date | null;
+
+  /**
+   * 해당 포스트에서 설명하는 이벤트의 공식 홈페이지, 티켓 판매처 등 추가적인 정보를 안내할 수 있는 외부 링크를 나타냅니다.
+   */
+  link: string | null;
+
+  /**
+   * 누적 조회수.
+   */
+  views: number;
+
+  /**
+   * 누적 좋아요 수.
+   */
+  likes: number;
+
+  /**
+   * 해당 포스트를 현재 사용자가 좋아요 표시했는지 여부.
+   *
+   * 로그아웃 상태에서는 항상 `false`입니다.
+   */
+  liked: boolean;
+
+  /**
+   * 해당 포스트를 현재 사용자가 북마크에 저장했는지 여부.
+   *
+   * 로그아웃 상태에서는 항상 `false`입니다.
+   */
+  saved: boolean;
+
+  /**
+   * 해당 포스트가 가질 태그의 ID 목록입니다.
+   */
+  tagIds: Array<string>;
+
+  /**
+   * 해당 포스트와 연관된 태그 정보입니다.
+   */
+  tags: TagDto;
 }
 
-export class PaginatedPostsDto {
-  items: Array<PostDto>;
-  cursor: string | null;
-}
+export namespace PostDto {
+  export class Create extends OmitType(PostDto, ['id'] as const) {
+    static name = 'Category Create';
+  }
 
-export class UpdatePostDto extends PartialType(CreatePostDto) {}
+  export class Update extends PartialType(Create) {}
+}
