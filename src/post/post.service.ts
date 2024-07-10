@@ -105,6 +105,41 @@ export class PostService {
     });
   }
 
+  async view(id: string) {
+    await this.prismaService.client.post.update({
+      where: { id },
+      data: { views: { increment: 1 } },
+    });
+  }
+
+  async like(id: string, userId: string) {
+    await this.prismaService.client.post.update({
+      where: { id },
+      data: { likedUsers: { connect: [{ uid: userId }] } },
+    });
+  }
+
+  async unlike(id: string, userId: string) {
+    await this.prismaService.client.post.update({
+      where: { id },
+      data: { likedUsers: { disconnect: [{ uid: userId }] } },
+    });
+  }
+
+  async save(id: string, userId: string) {
+    await this.prismaService.client.post.update({
+      where: { id },
+      data: { savedUsers: { connect: [{ uid: userId }] } },
+    });
+  }
+
+  async unsave(id: string, userId: string) {
+    await this.prismaService.client.post.update({
+      where: { id },
+      data: { savedUsers: { disconnect: [{ uid: userId }] } },
+    });
+  }
+
   async remove(id: string) {
     await this.prismaService.client.post.update({
       where: { id },
