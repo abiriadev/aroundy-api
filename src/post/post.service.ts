@@ -78,14 +78,26 @@ export class PostService {
     }));
   }
 
-  async create(company: PostDto.Create) {
-    const { location, tagIds, ...rest } = company;
-
+  async create({ location, tagIds, ...rest }: PostDto.Create) {
     await this.prismaService.client.post.create({
       data: {
         lat: location?.[0],
         lng: location?.[1],
         tags: {
+          connect: [...tagIds.map((id) => ({ id }))],
+        },
+        ...rest,
+      },
+    });
+  }
+
+  async update(id: string, { location, tagIds, ...rest }: PostDto.Update) {
+    await this.prismaService.client.post.update({
+      where: { id },
+      data: {
+        lat: location?.[0],
+        lng: location?.[1],
+        tags: tagIds && {
           connect: [...tagIds.map((id) => ({ id }))],
         },
         ...rest,
