@@ -58,6 +58,10 @@ model User {
     email  String?   @unique
     tel    String?   @unique
     birth  DateTime?
+
+    // owned relations
+    likedPosts Post[]
+    savedPosts Post[]
 }
 
 model Post {
@@ -82,11 +86,12 @@ model Post {
     startedAt    DateTime?
     endedAt      DateTime?
     link         String?
-    likes        Int                                   @default(0) // TODO: will have a relation with User later
     views        Int                                   @default(0)
 
     // owned relations
-    tags Tag[]
+    tags       Tag[]
+    likedUsers User[]
+    savedUsers User[]
 
     // referenced relations
     categoryId String
