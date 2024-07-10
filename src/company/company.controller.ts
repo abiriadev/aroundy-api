@@ -6,9 +6,10 @@ import {
   Body,
   Param,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
-import { CompanyDto } from './company.dto';
+import { CompanyDto, QueryDto } from './company.dto';
 import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('companies')
@@ -20,8 +21,10 @@ export class CompanyController {
    */
   @Get()
   @ApiOperation({ summary: '기업 목록 조회' })
-  async findAll(): Promise<Array<CompanyDto>> {
-    return this.companyService.findAll({});
+  async findAll(@Query() { q }: QueryDto): Promise<Array<CompanyDto>> {
+    return this.companyService.findAll({
+      contains: q,
+    });
   }
 
   /**

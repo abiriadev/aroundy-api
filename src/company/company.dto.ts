@@ -1,6 +1,15 @@
 import { OmitType, PartialType } from '@nestjs/swagger';
 import { IsDate, IsOptional, IsString, IsUrl, IsUUID } from 'class-validator';
 
+export class QueryDto {
+  /**
+   * 검색어
+   */
+  @IsString()
+  @IsOptional()
+  q: string;
+}
+
 export class CompanyDto {
   /**
    * 회사 고유 ID
