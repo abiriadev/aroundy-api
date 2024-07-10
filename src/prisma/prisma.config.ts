@@ -15,14 +15,14 @@ import {
 } from 'kysely';
 
 const extendedPrismaClientFactory = ({
-  db_host,
-  db_user,
-  db_port,
-  db_password,
-  db_database,
+  dbHost,
+  dbUser,
+  dbPort,
+  dbPassword,
+  dbDatabase,
 }: ConfigService.Db) =>
   new PrismaClient({
-    datasourceUrl: `postgresql://${db_user}:${db_password}@${db_host}:${db_port}/${db_database}`,
+    datasourceUrl: `postgresql://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbPassword}`,
   }).$extends(
     kyselyExtension({
       kysely: (driver) =>

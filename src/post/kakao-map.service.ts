@@ -56,7 +56,7 @@ export class KakaoMapService {
     const res = await firstValueFrom(
       this.httpService.get<KakaoMapResponse>(KakaoMapService.ENDPOINT, {
         headers: {
-          Authorization: `KakaoAK ${this.kakaoApiConfigService.kakao_api_key}`,
+          Authorization: `KakaoAK ${this.kakaoApiConfigService.kakaoApiKey}`,
         },
         params: {
           x,

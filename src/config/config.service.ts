@@ -30,10 +30,10 @@ export namespace ConfigService {
   export class Auth {
     @IsString()
     @MinLength(4)
-    jwt_secret: string;
+    jwtSecret: string;
 
     @IsString()
-    jwt_expiry: string = '4w';
+    jwtExpiry: string = '4w';
 
     @IsString()
     @MinLength(4)
@@ -42,25 +42,25 @@ export namespace ConfigService {
 
   export class Db {
     @IsString()
-    db_host: string = 'db';
+    dbHost: string = 'db';
 
     @IsInt()
     @Type(() => Number)
-    db_port: number = 5432;
+    dbPort: number = 5432;
 
     @IsString()
-    db_user: string = 'postgres';
+    dbUser: string = 'postgres';
 
     @IsString()
     @MinLength(4)
-    db_password: string;
+    dbPassword: string;
 
     @IsString()
-    db_database: string = 'aroundy';
+    dbDatabase: string = 'aroundy';
   }
 
   export class KakaoApi {
     @IsString()
-    kakao_api_key: string;
+    kakaoApiKey: string;
   }
 }
