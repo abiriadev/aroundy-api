@@ -22,7 +22,7 @@ const extendedPrismaClientFactory = ({
   dbDatabase,
 }: ConfigService.Db) =>
   new PrismaClient({
-    datasourceUrl: `postgresql://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbPassword}`,
+    datasourceUrl: `postgresql://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabase}`,
   }).$extends(
     kyselyExtension({
       kysely: (driver) =>
