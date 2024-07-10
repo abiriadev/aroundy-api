@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-import { KakaoApiConfig } from '@/config/config.service';
+import { ConfigService } from '@/config/config.service';
 import { Coordinate } from './post.dto';
 
 // NOTE: https://developers.kakao.com/docs/latest/ko/local/dev-guide#coord-to-address
@@ -47,7 +47,7 @@ export class KakaoMapService {
 
   constructor(
     private readonly httpService: HttpService,
-    private readonly kakaoApiConfigService: KakaoApiConfig,
+    private readonly kakaoApiConfigService: ConfigService.KakaoApi,
   ) {}
 
   async coordinateToAddress(coordinate: Coordinate): Promise<Address | null> {

@@ -2,7 +2,7 @@ import {
   CustomPrismaModuleAsyncOptions,
   CustomPrismaService,
 } from 'nestjs-prisma';
-import { DbConfig } from '@/config/config.service';
+import { ConfigService } from '@/config/config.service';
 import { ConfigModule } from '@/config/config.module';
 import kyselyExtension from 'prisma-extension-kysely';
 import { PrismaClient } from '@prisma/client';
@@ -20,7 +20,7 @@ const extendedPrismaClientFactory = ({
   db_port,
   db_password,
   db_database,
-}: DbConfig) =>
+}: ConfigService.Db) =>
   new PrismaClient({
     datasourceUrl: `postgresql://${db_user}:${db_password}@${db_host}:${db_port}/${db_database}`,
   }).$extends(
@@ -45,6 +45,6 @@ export type ExtendedPrismaClient = ReturnType<
 export const prismaConfig = {
   name: 'PrismaService',
   imports: [ConfigModule],
-  inject: [DbConfig],
+  inject: [ConfigService.Db],
   useFactory: extendedPrismaClientFactory,
 } satisfies CustomPrismaModuleAsyncOptions<ExtendedPrismaClient>;
