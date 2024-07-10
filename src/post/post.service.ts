@@ -79,12 +79,15 @@ export class PostService {
   }
 
   async create(company: PostDto.Create) {
-    const { location, ...rest } = company;
+    const { location, tagIds, ...rest } = company;
 
     await this.prismaService.client.post.create({
       data: {
         lat: location?.[0],
         lng: location?.[1],
+        tags: {
+          connect: [...tagIds.map((id) => ({ id }))],
+        },
         ...rest,
       },
     });
