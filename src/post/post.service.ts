@@ -1,82 +1,80 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePostDto, channelToPrisma, onOffLineFlags } from './post.dto';
-import { ExtendedPrismaService } from '@/prisma.config';
+import { Inject, Injectable } from '@nestjs/common';
 import { KakaoMapService } from './kakao-map.service';
-import { sql } from 'kysely';
-import { StPoint } from '@/kysely/types.unsupported';
-import { Post } from '@/kysely/types';
+import { ExtendedPrismaService } from '@/prisma/prisma.service';
+import { Coordinate, PostDto } from './post.dto';
 
 @Injectable()
 export class PostService {
   constructor(
+    @Inject('PrismaService')
     private readonly prismaService: ExtendedPrismaService,
     private readonly kakaoMapService: KakaoMapService,
   ) {}
 
-  async create({
-    title,
-    feeds,
-    caption,
-    channel,
-    location,
-    branch,
-    contact,
-    publishedAt,
-    startedAt,
-    endedAt,
-    link,
-    categoryId,
-    companyId,
-  }: CreatePostDto) {
-    let locationColumns: null | Pick<
-      Post,
-      'location' | 'locationText' | 'region'
-    > = null;
-
-    if (location) {
-      const resolvedAddress =
-        await this.kakaoMapService.coordinateToAddress(location);
-      if (!resolvedAddress) {
-        throw new Error('Invalid location');
-      }
-
-      const { address, region } = resolvedAddress;
-      const [lat, lng] = location;
-
-      locationColumns = {
-        location: sql<StPoint>`st_makepoint(${lat}, ${lng})`,
-        locationText: address,
-        region,
-      };
-    }
-
-    await this.prismaService.client.$kysely
-      .insertInto('Post')
-      .values({
-        // prisma engine immitation
-        updatedAt: new Date(),
-
-        title,
-        feeds,
-        caption,
-
-        // make location-related columns optional at once
-        channel: channelToPrisma[channel],
-        location: locationColumns?.location,
-        locationText: locationColumns?.locationText,
-        region: locationColumns?.region,
-
-        branch,
-        contact,
-        publishedAt,
-        startedAt,
-        endedAt,
-        link,
-        categoryId,
-        companyId,
-
-        ...onOffLineFlags(channel),
+  async fetch(): Promise<Array<PostDto>> {
+    return (
+      await this.prismaService.client.post.findMany({
+        select: {
+          id: true,
+          createdAt: true,
+          updatedAt: true,
+          title: true,
+          feeds: true,
+          caption: true,
+          contact: true,
+          publishedAt: true,
+          startedAt: true,
+          endedAt: true,
+          link: true,
+          views: true,
+          isOnline: true,
+          isOffline: true,
+          lat: true,
+          lng: true,
+          address1: true,
+          address2: true,
+          region: true,
+          branch: true,
+          tags: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          company: {
+            select: {
+              id: true,
+              createdAt: true,
+              updatedAt: true,
+              name: true,
+              logo: true,
+            },
+          },
+          _count: {
+            select: {
+              likedUsers: true,
+            },
+          },
+        },
+        where: {
+          deletedAt: null,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
       })
-      .execute();
+    ).map(({ lat, lng, _count: { likedUsers: likes }, ...rest }) => ({
+      location: lat !== null && lng !== null ? [lat, lng] : null,
+      likes,
+      liked: false,
+      saved: false,
+      ...rest,
+    }));
   }
 }
