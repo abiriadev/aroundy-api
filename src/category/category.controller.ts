@@ -1,6 +1,7 @@
 import { Controller, Post, Body, Get } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CategoryDto } from './category.dto';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('categories')
 export class CategoryController {
@@ -14,14 +15,16 @@ export class CategoryController {
    * 기본적으로 각 카테고리가 생성된 순서대로 정렬되어 반환됩니다.
    */
   @Get()
+  @ApiOperation({ summary: '카테고리 조회' })
   async findAll(): Promise<Array<CategoryDto>> {
     return await this.categoryService.findAll();
   }
 
   /**
-   * 카테고리 추가.
+   * 주어진 이름으로 새 카테고리를 생성합니다.
    */
   @Post()
+  @ApiOperation({ summary: '카테고리 추가' })
   async create(@Body() category: CategoryDto.Create) {
     await this.categoryService.create(category);
   }
