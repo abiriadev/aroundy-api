@@ -22,6 +22,11 @@ export namespace ConfigService {
     @Type(() => Number)
     port: number = 3000;
 
+    @IsString()
+    url(): string {
+      return `http://${this.host}:${this.port}`;
+    }
+
     @IsArray()
     @IsString({ each: true })
     cors: string[] = [];
@@ -51,6 +56,11 @@ export namespace ConfigService {
 
     @IsString()
     dbDatabase: string = 'aroundy';
+
+    @IsString()
+    dbUrl(): string {
+      return `postgresql://${this.dbUser}:${this.dbPassword}@${this.dbHost}:${this.dbPort}/${this.dbDatabase}`;
+    }
   }
 
   export class KakaoApi {
