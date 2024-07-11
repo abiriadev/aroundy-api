@@ -76,6 +76,8 @@ export class PostService {
           categoryId: category,
           companyId: brand,
           address1: region,
+          isOnline: channel === PostDto.Channel.Online,
+          isOffline: channel === PostDto.Channel.Offline,
         },
         orderBy: match(sort)
           .with(P.optional(PostDto.Sort.Latest), () => ({
