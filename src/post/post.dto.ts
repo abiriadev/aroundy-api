@@ -40,6 +40,8 @@ export class PostDto extends Identifiable {
 
   /**
    * 해당 포스트의 제목.
+   *
+   * @example "몰티저스 스페셜 팝업"
    */
   @MaxLength(16)
   title: string;
@@ -58,6 +60,8 @@ export class PostDto extends Identifiable {
 
   /**
    * 해당 광고의 슬라이딩 이미지 URL 목록.
+   *
+   * @example ['https://example.com/image1.png', 'https://example.com/image2.png', 'https://example.com/image3.png']
    */
   @IsUrl({}, { each: true })
   @ArrayMaxSize(10)
@@ -65,6 +69,8 @@ export class PostDto extends Identifiable {
 
   /**
    * 해당 포스트의 캡션, 다시 말해 이벤트 광고의 설명.
+   *
+   * @example "🎉 몰티저스 스페셜 팝업 이벤트에 여러분을 초대합니다! 🎉"
    */
   @MaxLength(2200)
   caption: string;
@@ -73,6 +79,8 @@ export class PostDto extends Identifiable {
    * 해당 포스트에서 설명하는 행사가 온라인 행사인지 여부.
    *
    * `isOffline`이 `false`인 경우, 본 속성은 반드시 `true`여야 합니다. 역은 성립하지 않습니다.
+   *
+   * @example true
    */
   @IsBoolean()
   isOnline: boolean;
@@ -83,18 +91,24 @@ export class PostDto extends Identifiable {
    * `isOnline`이 `false`인 경우, 본 속성은 반드시 `true`여야 합니다. 역은 성립하지 않습니다.
    *
    * 다시 말해, `isOnline`과 `isOffline`은 동시에 `false` 일 수 없습니다.
+   *
+   * @example true
    */
   @IsBoolean()
   isOffline: boolean;
 
   /**
    * 오프라인 행사일 경우, 행사가 진행되는 특정한 위치의 좌표를 나타냅니다.
+   *
+   * @example [37.51264278891025, 127.10246789395465]
    */
   @IsOptional()
   location: Coordinate | null;
 
   /**
    * `location`이 존재할 경우, 해당 위치의 최상위 지역명을 나타냅니다.
+   *
+   * @example 서울
    */
   @IsString()
   @IsOptional()
@@ -102,20 +116,17 @@ export class PostDto extends Identifiable {
 
   /**
    * `location`이 존재할 경우, 해당 위치의 2차 지역명을 나타냅니다.
+   *
+   * @example 송파구
    */
   @IsString()
   @IsOptional()
   address2: string | null;
 
   /**
-   * `location`이 존재할 경우, 해당 위치가 속한 지역을 나타냅니다.
-   */
-  @IsString()
-  @IsOptional()
-  region: string | null;
-
-  /**
    * `isOffline`이 `true` 이지만 지점에서 발생하는 이벤트의 경우, 해당 지점의 이름을 나타냅니다.
+   *
+   * @example null
    */
   @IsString()
   @IsOptional()
@@ -125,6 +136,8 @@ export class PostDto extends Identifiable {
    * 해당 이벤트의 주최측 또는 기업 연락처를 나타냅니다.
    *
    * 놀랍게도 이 정보는 앱 피그마에 전혀 등장하지 않는데 하여튼 있습니다. 왜인진 저도 몰?루.
+   *
+   * @example "01012345678"
    */
   @IsPhoneNumber()
   @IsOptional()
@@ -138,25 +151,26 @@ export class PostDto extends Identifiable {
    * 이벤트 시작일인 `startedAt`과는 별개입니다.
    */
   @IsDateString()
-  // @Type(() => Date)
   publishedAt: Date;
 
   /**
    * 본 포스트에서 설명하는 이벤트가 시작하는 시간을 나타냅니다.
    */
-  @IsDate()
+  @IsDateString()
   @IsOptional()
   startedAt: Date | null;
 
   /**
    * 본 포스트에서 설명하는 이벤트가 종료되는 시간을 나타냅니다.
    */
-  @IsDate()
+  @IsDateString()
   @IsOptional()
   endedAt: Date | null;
 
   /**
    * 해당 포스트에서 설명하는 이벤트의 공식 홈페이지, 티켓 판매처 등 추가적인 정보를 안내할 수 있는 외부 링크를 나타냅니다.
+   *
+   * @example https://event.example.com
    */
   @IsUrl()
   @IsOptional()
@@ -164,6 +178,8 @@ export class PostDto extends Identifiable {
 
   /**
    * 누적 조회수.
+   *
+   * @example 1234
    */
   @IsInt()
   @Min(0)
@@ -171,6 +187,8 @@ export class PostDto extends Identifiable {
 
   /**
    * 누적 좋아요 수.
+   *
+   * @example 5678
    */
   @IsInt()
   @Min(0)
@@ -180,6 +198,8 @@ export class PostDto extends Identifiable {
    * 해당 포스트를 현재 사용자가 좋아요 표시했는지 여부.
    *
    * 로그아웃 상태에서는 항상 `false`입니다.
+   *
+   * @example false
    */
   @IsBoolean()
   liked: boolean;
@@ -188,6 +208,8 @@ export class PostDto extends Identifiable {
    * 해당 포스트를 현재 사용자가 북마크에 저장했는지 여부.
    *
    * 로그아웃 상태에서는 항상 `false`입니다.
+   *
+   * @example false
    */
   @IsBoolean()
   saved: boolean;
@@ -209,14 +231,14 @@ export namespace PostDto {
     'company',
     'address1',
     'address2',
-    'region',
     'views',
     'likes',
     'liked',
     'saved',
     'tags',
   ] as const) {
-    static name = 'Category Create';
+    static name = 'Post Create';
+
     /**
      * 해당 포스트가 속하는 카테고리의 ID.
      */
@@ -237,5 +259,7 @@ export namespace PostDto {
     tagIds: Array<string>;
   }
 
-  export class Update extends PartialType(Create) {}
+  export class Update extends PartialType(Create) {
+    static name = 'Post Update';
+  }
 }

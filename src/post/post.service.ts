@@ -33,7 +33,6 @@ export class PostService {
           lng: true,
           address1: true,
           address2: true,
-          region: true,
           branch: true,
           tags: {
             select: {
