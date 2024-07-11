@@ -29,15 +29,9 @@ export namespace ConfigService {
 
   export class Auth {
     @IsString()
-    @MinLength(4)
-    jwtSecret: string;
+    firebaseClientId: string;
 
-    @IsString()
-    jwtExpiry: string = '4w';
-
-    @IsString()
-    @MinLength(4)
-    pepper: string;
+    // TODO: fill information needed to use firebase admin SDK
   }
 
   export class Db {
