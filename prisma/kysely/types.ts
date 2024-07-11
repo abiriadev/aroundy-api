@@ -43,7 +43,6 @@ export type Post = {
   lng: number | null;
   address1: string | null;
   address2: string | null;
-  region: string | null;
   branch: string | null;
   categoryId: string;
   companyId: string;

@@ -59,7 +59,6 @@ model Post {
     lng       Float?
     address1  String?
     address2  String?
-    region    String?
     branch    String?
 
     // owned relations

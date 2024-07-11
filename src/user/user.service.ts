@@ -51,7 +51,6 @@ export class UserService {
               lng: true,
               address1: true,
               address2: true,
-              region: true,
               branch: true,
               tags: {
                 select: {
