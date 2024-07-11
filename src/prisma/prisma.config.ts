@@ -14,15 +14,9 @@ import {
   PostgresQueryCompiler,
 } from 'kysely';
 
-const extendedPrismaClientFactory = ({
-  dbHost,
-  dbUser,
-  dbPort,
-  dbPassword,
-  dbDatabase,
-}: ConfigService.Db) =>
+const extendedPrismaClientFactory = ({ dbUrl }: ConfigService.Db) =>
   new PrismaClient({
-    datasourceUrl: `postgresql://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabase}`,
+    datasourceUrl: dbUrl(),
   }).$extends(
     kyselyExtension({
       kysely: (driver) =>

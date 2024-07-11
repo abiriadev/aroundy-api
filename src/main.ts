@@ -24,7 +24,7 @@ const bootstrap = async () => {
     },
   );
 
-  const { port, host } = app.get(ConfigService.Network);
+  const { port, url } = app.get(ConfigService.Network);
 
   SwaggerModule.setup(
     'openapi',
@@ -36,7 +36,7 @@ const bootstrap = async () => {
         .setDescription('Aroundy 앱 및 어드민 페이지 공용 API')
         .setVersion('phase1')
         .addServer(`http://127.0.0.1:${port}`, 'local server')
-        .addServer(`https://${host}:${port}`, 'production server')
+        .addServer(url(), 'production server')
         .setExternalDoc(
           'Notion',
           'https://www.notion.so/Aroundy-550556a8fa18413ea0e0bce1b415eb17',
