@@ -6,6 +6,7 @@ import { TagModule } from '@/tag/tag.module';
 import { ConfigModule } from '@/config/config.module';
 import { PrismaModule } from '@/prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from './auth/auth.module';
     CompanyModule,
     CategoryModule,
     TagModule,
+    UserModule,
   ],
 })
 export class AppModule {}
