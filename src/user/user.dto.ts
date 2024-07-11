@@ -6,14 +6,13 @@ export type Coordinate = [number, number];
 export class UserDto {
   static name = 'User';
 
-  // NOTE: 유저 스키마만 id가 아니라 uid를 사용해서 `Identifiable`을 상속받지 않습니다.`
   /**
    * 고유 ID
    *
    * @example "429b20b3-4df8-42da-8e40-e3816504792c"
    */
   @IsUUID()
-  uid: string;
+  uid: string; // NOTE: 유저 스키마만 id가 아니라 uid를 사용해서 `Identifiable`을 상속받지 않습니다.`
 
   /**
    * 해당 유저가 가입한 날짜.

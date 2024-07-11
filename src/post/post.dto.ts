@@ -126,7 +126,7 @@ export class PostDto extends Identifiable {
   /**
    * `isOffline`이 `true` 이지만 지점에서 발생하는 이벤트의 경우, 해당 지점의 이름을 나타냅니다.
    *
-   * @example null
+   * @example 스타벅스 코리아
    */
   @IsString()
   @IsOptional()
