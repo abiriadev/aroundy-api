@@ -2,7 +2,8 @@ import { Controller, Post, Body, Get } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CategoryDto } from './category.dto';
 import { ApiOperation } from '@nestjs/swagger';
-import { Role, Roles } from '@/roles.guard';
+import { Roles } from '@/auth/roles.decorator';
+import { Role } from '@/auth/roles.enum';
 
 @Controller('categories')
 export class CategoryController {

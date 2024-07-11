@@ -8,6 +8,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import fastifyCookie from '@fastify/cookie';
 
 const bootstrap = async () => {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -49,6 +50,8 @@ const bootstrap = async () => {
       forbidNonWhitelisted: true,
     }),
   );
+
+  app.register(fastifyCookie);
 
   await app.listen(port, '0.0.0.0');
   console.log(`Application is running on: ${port}`);

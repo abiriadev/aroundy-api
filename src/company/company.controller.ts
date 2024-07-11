@@ -12,7 +12,8 @@ import { CompanyService } from './company.service';
 import { CompanyDto, QueryDto } from './company.dto';
 import { ApiOperation } from '@nestjs/swagger';
 import { Identifiable } from '@/common/identifiable.dto';
-import { Role, Roles } from '@/roles.guard';
+import { Roles } from '@/auth/roles.decorator';
+import { Role } from '@/auth/roles.enum';
 
 @Controller('companies')
 export class CompanyController {

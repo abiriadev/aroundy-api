@@ -2,7 +2,8 @@ import { Controller, Post, Body, Get } from '@nestjs/common';
 import { TagService } from './tag.service';
 import { TagDto } from './tag.dto';
 import { ApiOperation } from '@nestjs/swagger';
-import { Role, Roles } from '@/roles.guard';
+import { Roles } from '@/auth/roles.decorator';
+import { Role } from '@/auth/roles.enum';
 
 @Controller('tags')
 export class TagController {

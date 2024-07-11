@@ -11,7 +11,9 @@ import { PostService } from './post.service';
 import { PostDto } from './post.dto';
 import { Identifiable } from '@/common/identifiable.dto';
 import { ApiOperation } from '@nestjs/swagger';
-import { Role, Roles, UserId } from '@/roles.guard';
+import { Roles } from '@/auth/roles.decorator';
+import { Role } from '@/auth/roles.enum';
+import { UserId } from '@/auth/userid.decorator';
 
 @Controller('posts')
 export class PostController {
