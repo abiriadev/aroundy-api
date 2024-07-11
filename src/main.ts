@@ -9,6 +9,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import fastifyCookie from '@fastify/cookie';
+import { cookieKey } from './auth/roles.guard';
 
 const bootstrap = async () => {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -40,6 +41,7 @@ const bootstrap = async () => {
           'Notion',
           'https://www.notion.so/Aroundy-550556a8fa18413ea0e0bce1b415eb17',
         )
+        .addCookieAuth(cookieKey)
         .build(),
     ),
   );

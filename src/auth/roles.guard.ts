@@ -10,6 +10,8 @@ import { Role } from './roles.enum';
 import { ROLES_KEY } from './roles.decorator';
 import { AuthService } from './auth.service';
 
+export const cookieKey = 'AUTHORIZATION';
+
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(
@@ -26,9 +28,9 @@ export class RolesGuard implements CanActivate {
 
     const req = context.switchToHttp().getRequest();
 
-    if (!('AUTHORIZATION' in req.cookies)) return false;
+    if (!(cookieKey in req.cookies)) return false;
 
-    const token = req.cookies['AUTHORIZATION'];
+    const token = req.cookies[cookieKey];
 
     if (!this.authService.verifyToken(token)) return false;
 
