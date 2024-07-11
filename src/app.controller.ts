@@ -9,6 +9,8 @@ export class AppController {
   index() {
     return {
       host: this.networkConfigService.url,
+      openapi: `${this.networkConfigService.url}/openapi`,
+      metrics: `${this.networkConfigService.url}/metrics`,
     };
   }
 }

@@ -8,6 +8,7 @@ import { PrismaModule } from '@/prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AppController } from './app.controller';
     CategoryModule,
     TagModule,
     UserModule,
+    PrometheusModule.register(),
   ],
   controllers: [AppController],
 })
