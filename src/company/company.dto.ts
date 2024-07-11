@@ -2,19 +2,6 @@ import { Identifiable } from '@/common/identifiable.dto';
 import { OmitType, PartialType } from '@nestjs/swagger';
 import { IsDate, IsOptional, IsString, IsUrl } from 'class-validator';
 
-export class QueryDto {
-  /**
-   * 기업 검색에 사용할 검색어
-   *
-   * 리얼타임 검색 UI를 위해 존재합니다.
-   *
-   * @example 스타벅
-   */
-  @IsString()
-  @IsOptional()
-  q?: string;
-}
-
 export class CompanyDto extends Identifiable {
   static name = 'Company';
 
@@ -61,5 +48,18 @@ export namespace CompanyDto {
 
   export class Update extends PartialType(Create) {
     static name = 'Company Update';
+  }
+
+  export class Query {
+    /**
+     * 기업 검색에 사용할 검색어
+     *
+     * 리얼타임 검색 UI를 위해 존재합니다.
+     *
+     * @example 스타벅
+     */
+    @IsString()
+    @IsOptional()
+    q?: string;
   }
 }

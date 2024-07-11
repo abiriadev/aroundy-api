@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
-import { CompanyDto, QueryDto } from './company.dto';
+import { CompanyDto } from './company.dto';
 import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Identifiable } from '@/common/identifiable.dto';
 import { Roles } from '@/auth/roles.decorator';
@@ -25,7 +25,7 @@ export class CompanyController {
   @ApiTags('App', 'Admin')
   @Get()
   @ApiOperation({ summary: '기업 목록 조회' })
-  async fetch(@Query() { q }: QueryDto): Promise<Array<CompanyDto>> {
+  async fetch(@Query() { q }: CompanyDto.Query): Promise<Array<CompanyDto>> {
     return this.companyService.fetch({
       contains: q,
     });
