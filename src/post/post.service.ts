@@ -91,7 +91,26 @@ export class PostService {
               endedAt: {
                 lte: new Date(),
               },
-            })),
+            }))
+            .otherwise(() => ({})),
+          ...match([q, range])
+            .with([P.nonNullable, PostDto.SearchRange.Brand], ([q]) => ({
+              company: { name: { contains: q } },
+            }))
+            .with([P.nonNullable, PostDto.SearchRange.Title], ([q]) => ({
+              title: { contains: q },
+            }))
+            .with([P.nonNullable, PostDto.SearchRange.Caption], ([q]) => ({
+              caption: { contains: q },
+            }))
+            .with([P.nonNullable, undefined], ([q]) => ({
+              OR: [
+                { company: { name: { contains: q } } },
+                { title: { contains: q } },
+                { caption: { contains: q } },
+              ],
+            }))
+            .otherwise(() => ({})),
         },
         orderBy: match(sort)
           .with(P.optional(PostDto.Sort.Latest), () => ({
