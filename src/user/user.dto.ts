@@ -31,7 +31,7 @@ export class UserDto {
    * 가입 시 사용한 OAuth 제공업체
    */
   @IsString()
-  oauthProvier: string;
+  oauthProvider: string;
 
   /**
    * 최근 로그인 시각
