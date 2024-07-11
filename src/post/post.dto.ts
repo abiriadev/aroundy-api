@@ -263,23 +263,23 @@ export namespace PostDto {
     static name = 'Post Update';
   }
 
-  enum SearchRange {
+  export enum SearchRange {
     Brand = 'brand',
     Title = 'title',
     Caption = 'caption',
   }
 
-  enum Channel {
+  export enum Channel {
     Online = 'online',
     Offline = 'offline',
   }
 
-  enum State {
+  export enum State {
     Ongoing = 'ongoing',
     Ended = 'ended',
   }
 
-  enum Sort {
+  export enum Sort {
     Latest = 'latest',
     Popular = 'popular',
     StartingSoon = 'starting-soon',
