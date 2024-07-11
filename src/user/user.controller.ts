@@ -4,7 +4,7 @@ import { UserDto } from './user.dto';
 import { Roles } from '@/auth/roles.decorator';
 import { Role } from '@/auth/roles.enum';
 import { UserId } from '@/auth/userid.decorator';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiOperation } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
@@ -14,6 +14,7 @@ export class UserController {
    * 서비스의 전체 유저 목록을 조회합니다.
    */
   @Get()
+  @ApiCookieAuth()
   @Roles(Role.Admin)
   @ApiOperation({ summary: '가입한 유저 목록 조회' })
   async fetch(): Promise<Array<UserDto>> {
@@ -24,6 +25,7 @@ export class UserController {
    * 현재 로그인한 유저의 프로필 정보를 조회합니다.
    */
   @Get('profile')
+  @ApiCookieAuth()
   @Roles(Role.User)
   @ApiOperation({ summary: '로그인한 유저 프로필 조회' })
   async profile(@UserId() userId: string): Promise<UserDto.Profile> {
@@ -34,6 +36,7 @@ export class UserController {
    * 현재 로그인한 유저의 계정을 삭제합니다.
    */
   @Delete()
+  @ApiCookieAuth()
   @Roles(Role.User)
   @ApiOperation({ summary: '회원 탈퇴' })
   async remove(@UserId() userId: string) {

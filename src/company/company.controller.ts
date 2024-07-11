@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CompanyDto, QueryDto } from './company.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiOperation } from '@nestjs/swagger';
 import { Identifiable } from '@/common/identifiable.dto';
 import { Roles } from '@/auth/roles.decorator';
 import { Role } from '@/auth/roles.enum';
@@ -36,6 +36,7 @@ export class CompanyController {
    * 동일한 기업명이 이미 존재하는 경우, 예외가 발생합니다.
    */
   @Post()
+  @ApiCookieAuth()
   @Roles(Role.Admin)
   @ApiOperation({ summary: '기업 가입' })
   async create(@Body() company: CompanyDto.Create) {
@@ -46,6 +47,7 @@ export class CompanyController {
    * 기업 정보를 수정합니다.
    */
   @Patch(':id')
+  @ApiCookieAuth()
   @Roles(Role.Admin)
   @ApiOperation({ summary: '기업정보 수정' })
   async update(
@@ -61,6 +63,7 @@ export class CompanyController {
    * 단, 기업 정보는 삭제되지 않으며, 해당 기업이 올린 모든 포스트는 공개된 채로 보존됩니다.
    */
   @Delete(':id')
+  @ApiCookieAuth()
   @Roles(Role.Admin)
   @ApiOperation({ summary: '기업 탈퇴' })
   async remove(@Param() { id }: Identifiable) {
