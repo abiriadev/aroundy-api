@@ -24,8 +24,7 @@
     "prisma:docs": "prisma-docs-generator serve",
     "prisma:generate": "prisma generate",
     "prisma:seed": "prisma db seed",
-    "prisma:studio": "prisma studio",
-    "prepare": "ts-patch install && typia patch"
+    "prisma:studio": "prisma studio"
   },
   "dependencies": {
     "@fastify/cookie": "^9.3.1",
