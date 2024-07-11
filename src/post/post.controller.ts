@@ -27,7 +27,7 @@ export class PostController {
   @Get()
   @ApiOperation({ summary: '포스트 목록 조회 및 검색' })
   async fetch(@Query() query: PostDto.Query): Promise<Array<PostDto>> {
-    return await this.postService.fetch();
+    return await this.postService.fetch(query);
   }
 
   /**
