@@ -9,7 +9,78 @@ export class UserService {
   ) {}
 
   async fetch() {
-    return await this.prismaService.client.user.findMany();
+    return await this.prismaService.client.user.findMany({
+      select: {
+        createdAt: true,
+        updatedAt: true,
+        uid: true,
+        oauthProvider: true,
+        recentlyLoggedInAt: true,
+      },
+    });
+  }
+
+  async profile(id: string) {
+    return await this.prismaService.client.user.findUniqueOrThrow({
+      where: { uid: id },
+      select: {
+        createdAt: true,
+        updatedAt: true,
+        uid: true,
+        oauthProvider: true,
+        recentlyLoggedInAt: true,
+        savedPosts: {
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            title: true,
+            feeds: true,
+            caption: true,
+            contact: true,
+            publishedAt: true,
+            startedAt: true,
+            endedAt: true,
+            link: true,
+            views: true,
+            isOnline: true,
+            isOffline: true,
+            lat: true,
+            lng: true,
+            address1: true,
+            address2: true,
+            region: true,
+            branch: true,
+            tags: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            category: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            company: {
+              select: {
+                id: true,
+                createdAt: true,
+                updatedAt: true,
+                name: true,
+                logo: true,
+              },
+            },
+            _count: {
+              select: {
+                likedUsers: true,
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   async remove(id: string) {
