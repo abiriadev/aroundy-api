@@ -10,6 +10,8 @@ export class AuthService {
   verifyToken(_token: string) {
     const { firebaseClientId } = this.authConfigService;
 
+    // NOTE: don't forget to update `recentlyLoggedInAt` field after successful signin!
+
     return true;
   }
 }
