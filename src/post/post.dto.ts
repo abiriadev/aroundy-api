@@ -264,26 +264,26 @@ export namespace PostDto {
   }
 
   enum SearchRange {
-    Brand,
-    Title,
-    Caption,
+    Brand = 'brand',
+    Title = 'title',
+    Caption = 'caption',
   }
 
   enum Channel {
-    Online,
-    Offline,
+    Online = 'online',
+    Offline = 'offline',
   }
 
   enum State {
-    Ongoing,
-    Ended,
+    Ongoing = 'ongoing',
+    Ended = 'ended',
   }
 
   enum Sort {
-    Latest,
-    Popular,
-    StartingSoon,
-    EndingSoon,
+    Latest = 'latest',
+    Popular = 'popular',
+    StartingSoon = 'starting-soon',
+    EndingSoon = 'ending-soon',
   }
 
   export class Query {
@@ -326,12 +326,15 @@ export namespace PostDto {
     @IsOptional()
     brand?: string;
 
-    @ApiProperty({
-      enum: [],
-    })
+    /**
+     * 온, 오프라인 등 이벤트의 형태를 기준으로 필터링합니다.
+     */
     @IsOptional()
     channel?: Channel;
 
+    /**
+     * 이벤트의 진행 상태, 종료 여부 등을 기준으로 필터링합니다.
+     */
     @IsOptional()
     state?: State;
 
@@ -344,6 +347,9 @@ export namespace PostDto {
     @IsOptional()
     region: string;
 
+    /**
+     * 검색한 포스트들의 정렬 순서를 결정합니다.
+     */
     @IsOptional()
     sort: Sort;
   }
