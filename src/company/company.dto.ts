@@ -12,7 +12,7 @@ export class QueryDto {
    */
   @IsString()
   @IsOptional()
-  q: string;
+  q?: string;
 }
 
 export class CompanyDto extends Identifiable {
