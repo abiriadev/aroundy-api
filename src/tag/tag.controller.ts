@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Get } from '@nestjs/common';
 import { TagService } from './tag.service';
 import { TagDto } from './tag.dto';
-import { ApiCookieAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@/auth/roles.decorator';
 import { Role } from '@/auth/roles.enum';
 
@@ -16,6 +16,7 @@ export class TagController {
    *
    * 기본적으로 각 태그가 추가된 순서대로 정렬되어 반환됩니다.
    */
+  @ApiTags('App', 'Admin')
   @Get()
   @ApiOperation({ summary: '태그 목록 조회' })
   async fetch(): Promise<Array<TagDto>> {
@@ -27,6 +28,7 @@ export class TagController {
    *
    * 같은 이름의 태그가 이미 존재하는 경우, 예외가 발생합니다.
    */
+  @ApiTags('Admin')
   @Post()
   @ApiCookieAuth()
   @Roles(Role.Admin)

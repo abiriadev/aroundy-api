@@ -4,7 +4,7 @@ import { UserDto } from './user.dto';
 import { Roles } from '@/auth/roles.decorator';
 import { Role } from '@/auth/roles.enum';
 import { UserId } from '@/auth/userid.decorator';
-import { ApiCookieAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
@@ -13,6 +13,7 @@ export class UserController {
   /**
    * 서비스의 전체 유저 목록을 조회합니다.
    */
+  @ApiTags('Admin')
   @Get()
   @ApiCookieAuth()
   @Roles(Role.Admin)
@@ -24,6 +25,7 @@ export class UserController {
   /**
    * 현재 로그인한 유저의 프로필 정보를 조회합니다.
    */
+  @ApiTags('App')
   @Get('profile')
   @ApiCookieAuth()
   @Roles(Role.User)
@@ -35,6 +37,7 @@ export class UserController {
   /**
    * 현재 로그인한 유저의 계정을 삭제합니다.
    */
+  @ApiTags('App')
   @Delete()
   @ApiCookieAuth()
   @Roles(Role.User)

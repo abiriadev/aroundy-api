@@ -1,5 +1,5 @@
 import { Controller, Post } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -7,6 +7,7 @@ export class AuthController {
   /**
    * 회원가입.
    */
+  @ApiTags('App')
   @Post('/signup')
   @ApiOperation({ summary: '회원가입' })
   async signup() {
@@ -16,6 +17,7 @@ export class AuthController {
   /**
    * 로그인.
    */
+  @ApiTags('App')
   @Post('/signin')
   @ApiOperation({ summary: '로그인' })
   async signin() {

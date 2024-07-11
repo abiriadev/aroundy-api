@@ -10,7 +10,7 @@ import {
 import { PostService } from './post.service';
 import { PostDto } from './post.dto';
 import { Identifiable } from '@/common/identifiable.dto';
-import { ApiCookieAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Roles } from '@/auth/roles.decorator';
 import { Role } from '@/auth/roles.enum';
 import { UserId } from '@/auth/userid.decorator';
@@ -22,6 +22,7 @@ export class PostController {
   /**
    * 전체 포스트 목록을 다양한 쿼리를 통해 조회할 수 있습니다.
    */
+  @ApiTags('App', 'Admin')
   @Get()
   @ApiOperation({ summary: '포스트 목록 조회 및 검색' })
   async fetch(): Promise<Array<PostDto>> {
@@ -31,6 +32,7 @@ export class PostController {
   /**
    * 주어진 정보에 따라 새 포스트를 등록합니다.
    */
+  @ApiTags('Admin')
   @Post()
   @ApiCookieAuth()
   @Roles(Role.Admin)
@@ -44,6 +46,7 @@ export class PostController {
    *
    * 현재는 수정 API로 해당 포스트를 올린 기업을 변경할 수 있지만, 추후 이 동작이 불가능해질 수 있습니다.
    */
+  @ApiTags('Admin')
   @Patch(':id')
   @ApiCookieAuth()
   @Roles(Role.Admin)
@@ -55,6 +58,7 @@ export class PostController {
   /**
    * 해당 포스트의 조회수를 1 증가시킵니다.
    */
+  @ApiTags('App')
   @Patch(':id/view')
   @ApiOperation({ summary: '포스트 조회수 증가' })
   async view(@Param() { id }: Identifiable) {
@@ -64,6 +68,7 @@ export class PostController {
   /**
    * 해당 포스트에 좋아요를 누릅니다.
    */
+  @ApiTags('App')
   @Post(':id/like')
   @ApiCookieAuth()
   @Roles(Role.User)
@@ -77,6 +82,7 @@ export class PostController {
   /**
    * 해당 포스트에 좋아요를 취소합니다.
    */
+  @ApiTags('App')
   @Delete(':id/like')
   @ApiCookieAuth()
   @Roles(Role.User)
@@ -88,6 +94,7 @@ export class PostController {
   /**
    * 해당 포스트를 북마크에 추가합니다.
    */
+  @ApiTags('App')
   @Post(':id/save')
   @ApiCookieAuth()
   @Roles(Role.User)
@@ -99,6 +106,7 @@ export class PostController {
   /**
    * 해당 포스트를 북마크에서 삭제합니다.
    */
+  @ApiTags('App')
   @Delete(':id/save')
   @ApiCookieAuth()
   @Roles(Role.User)
@@ -110,6 +118,7 @@ export class PostController {
   /**
    * 해당 포스트를 영구적으로 삭제합니다.
    */
+  @ApiTags('Admin')
   @Delete(':id')
   @ApiCookieAuth()
   @Roles(Role.Admin)

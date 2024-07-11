@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CompanyDto, QueryDto } from './company.dto';
-import { ApiCookieAuth, ApiOperation } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Identifiable } from '@/common/identifiable.dto';
 import { Roles } from '@/auth/roles.decorator';
 import { Role } from '@/auth/roles.enum';
@@ -22,6 +22,7 @@ export class CompanyController {
   /**
    * 기업 전체 목록을 조회 및 검색합니다.
    */
+  @ApiTags('App', 'Admin')
   @Get()
   @ApiOperation({ summary: '기업 목록 조회' })
   async fetch(@Query() { q }: QueryDto): Promise<Array<CompanyDto>> {
@@ -35,6 +36,7 @@ export class CompanyController {
    *
    * 동일한 기업명이 이미 존재하는 경우, 예외가 발생합니다.
    */
+  @ApiTags('Admin')
   @Post()
   @ApiCookieAuth()
   @Roles(Role.Admin)
@@ -46,6 +48,7 @@ export class CompanyController {
   /**
    * 기업 정보를 수정합니다.
    */
+  @ApiTags('Admin')
   @Patch(':id')
   @ApiCookieAuth()
   @Roles(Role.Admin)
@@ -62,6 +65,7 @@ export class CompanyController {
    *
    * 단, 기업 정보는 삭제되지 않으며, 해당 기업이 올린 모든 포스트는 공개된 채로 보존됩니다.
    */
+  @ApiTags('Admin')
   @Delete(':id')
   @ApiCookieAuth()
   @Roles(Role.Admin)
