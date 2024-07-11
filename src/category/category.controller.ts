@@ -2,6 +2,7 @@ import { Controller, Post, Body, Get } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CategoryDto } from './category.dto';
 import { ApiOperation } from '@nestjs/swagger';
+import { Role, Roles } from '@/roles.guard';
 
 @Controller('categories')
 export class CategoryController {
@@ -26,6 +27,7 @@ export class CategoryController {
    * 같은 이름의 카테고리가 이미 존재하는 경우, 예외가 발생합니다.
    */
   @Post()
+  @Roles(Role.Admin)
   @ApiOperation({ summary: '카테고리 추가' })
   async create(@Body() category: CategoryDto.Create) {
     await this.categoryService.create(category);

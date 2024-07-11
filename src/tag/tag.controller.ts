@@ -2,6 +2,7 @@ import { Controller, Post, Body, Get } from '@nestjs/common';
 import { TagService } from './tag.service';
 import { TagDto } from './tag.dto';
 import { ApiOperation } from '@nestjs/swagger';
+import { Role, Roles } from '@/roles.guard';
 
 @Controller('tags')
 export class TagController {
@@ -26,6 +27,7 @@ export class TagController {
    * 같은 이름의 태그가 이미 존재하는 경우, 예외가 발생합니다.
    */
   @Post()
+  @Roles(Role.Admin)
   @ApiOperation({ summary: '태그 등록' })
   async create(@Body() Tag: TagDto.Create) {
     return this.TagService.create(Tag);
