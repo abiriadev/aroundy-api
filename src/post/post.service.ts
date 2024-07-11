@@ -16,7 +16,7 @@ export class PostService {
     q,
     range,
     category,
-    brand,
+    company,
     channel,
     state,
     region,
@@ -74,7 +74,7 @@ export class PostService {
         where: {
           deletedAt: null,
           categoryId: category,
-          companyId: brand,
+          companyId: company,
           address1: region,
           isOnline: channel === PostDto.Channel.Online,
           isOffline: channel === PostDto.Channel.Offline,
@@ -94,7 +94,7 @@ export class PostService {
             }))
             .otherwise(() => ({})),
           ...match([q, range])
-            .with([P.nonNullable, PostDto.SearchRange.Brand], ([q]) => ({
+            .with([P.nonNullable, PostDto.SearchRange.Company], ([q]) => ({
               company: { name: { contains: q } },
             }))
             .with([P.nonNullable, PostDto.SearchRange.Title], ([q]) => ({

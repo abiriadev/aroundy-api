@@ -264,7 +264,7 @@ export namespace PostDto {
   }
 
   export enum SearchRange {
-    Brand = 'brand',
+    Company = 'company',
     Title = 'title',
     Caption = 'caption',
   }
@@ -303,7 +303,7 @@ export namespace PostDto {
      *
      * `q` 값이 없는 경우, 본 속성은 아무 의미도 갖지 않습니다.
      *
-     * - `brand`: 브랜드명에서 검색
+     * - `company`: 브랜드명에서 검색
      * - `title`: 제목에서 검색
      * - `caption`: 캡션에서 검색
      *
@@ -338,7 +338,7 @@ export namespace PostDto {
      */
     @IsUUID()
     @IsOptional()
-    brand?: string;
+    company?: string;
 
     /**
      * 온, 오프라인 등 이벤트의 형태를 기준으로 필터링합니다.
