@@ -36,10 +36,9 @@ model User {
 
 model Post {
     // inherited fields
-    id        String    @id @default(uuid()) // see https://www.prisma.io/docs/orm/reference/prisma-schema-reference#default
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
+    id        String   @id @default(uuid()) // see https://www.prisma.io/docs/orm/reference/prisma-schema-reference#default
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     // common information
     title       String    @db.VarChar(16)

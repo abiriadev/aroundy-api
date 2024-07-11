@@ -72,7 +72,6 @@ export class PostService {
           },
         },
         where: {
-          deletedAt: null,
           categoryId: category,
           companyId: company,
           address1: region,
@@ -199,9 +198,8 @@ export class PostService {
   }
 
   async remove(id: string) {
-    await this.prismaService.client.post.update({
+    await this.prismaService.client.post.delete({
       where: { id },
-      data: { deletedAt: new Date() },
     });
   }
 }

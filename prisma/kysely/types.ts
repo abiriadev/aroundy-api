@@ -27,7 +27,6 @@ export type Post = {
   id: string;
   createdAt: Generated<Timestamp>;
   updatedAt: Timestamp;
-  deletedAt: Timestamp | null;
   title: string;
   feeds: string[];
   caption: string;
