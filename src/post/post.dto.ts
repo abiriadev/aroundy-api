@@ -1,4 +1,4 @@
-import { OmitType, PartialType } from '@nestjs/swagger';
+import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
 import { CompanyDto } from '@/company/company.dto';
 import { TagDto } from '@/tag/tag.dto';
 import { Identifiable } from '@/common/identifiable.dto';
@@ -261,5 +261,90 @@ export namespace PostDto {
 
   export class Update extends PartialType(Create) {
     static name = 'Post Update';
+  }
+
+  enum SearchRange {
+    Brand,
+    Title,
+    Caption,
+  }
+
+  enum Channel {
+    Online,
+    Offline,
+  }
+
+  enum State {
+    Ongoing,
+    Ended,
+  }
+
+  enum Sort {
+    Latest,
+    Popular,
+    StartingSoon,
+    EndingSoon,
+  }
+
+  export class Query {
+    /**
+     * 포스트 검색에 사용할 검색어
+     *
+     * 리얼타임 검색 UI를 위해 존재합니다.
+     *
+     * @example 스타벅
+     */
+    @IsString()
+    @IsOptional()
+    q?: string;
+
+    /**
+     * 검색 범위
+     */
+    @IsOptional()
+    range: SearchRange;
+
+    /**
+     * 필터링할 특정 카테고리의 ID.
+     *
+     * 앱 화면에서 카테고리별로 포스트를 나누기 위해 사용됩니다.
+     *
+     * @example "429b20b3-4df8-42da-8e40-e3816504792c"
+     */
+    @IsUUID()
+    @IsOptional()
+    category?: string;
+
+    /**
+     * 특정 브랜드가 올린 포스트만 검색합니다.
+     *
+     * 여러 브랜드를 선택할 수 없음에 주의하세요.
+     *
+     * @example "429b20b3-4df8-42da-8e40-e3816504792c"
+     */
+    @IsUUID()
+    @IsOptional()
+    brand?: string;
+
+    @ApiProperty({
+      enum: [],
+    })
+    @IsOptional()
+    channel?: Channel;
+
+    @IsOptional()
+    state?: State;
+
+    /**
+     * 특정 지역에서 열리는 이벤트만 검색합니다.
+     *
+     * 여러 지역을 동시에 선택할 수 없음에 주의하세요.
+     */
+    @IsString()
+    @IsOptional()
+    region: string;
+
+    @IsOptional()
+    sort: Sort;
   }
 }
