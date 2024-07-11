@@ -12,7 +12,16 @@ export class PostService {
     private readonly kakaoMapService: KakaoMapService,
   ) {}
 
-  async fetch(query: PostDto.Query): Promise<Array<PostDto>> {
+  async fetch({
+    q,
+    range,
+    category,
+    brand,
+    channel,
+    state,
+    region,
+    sort,
+  }: PostDto.Query): Promise<Array<PostDto>> {
     return (
       await this.prismaService.client.post.findMany({
         select: {
@@ -64,11 +73,11 @@ export class PostService {
         },
         where: {
           deletedAt: null,
-          categoryId: query.category,
-          companyId: query.brand,
-          address1: query.region,
+          categoryId: category,
+          companyId: brand,
+          address1: region,
         },
-        orderBy: match(query.sort)
+        orderBy: match(sort)
           .with(P.optional(PostDto.Sort.Latest), () => ({
             publishedAt: 'desc' as const,
           }))
