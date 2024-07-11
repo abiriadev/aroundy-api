@@ -7,8 +7,35 @@ import { Coordinate } from './post.dto';
 // NOTE: https://developers.kakao.com/docs/latest/ko/local/dev-guide#coord-to-address
 
 export interface Address {
-  address: string;
-  region: string;
+  /** 1차 지역명 */
+  address1: string;
+
+  /** 2차 지역명 */
+  address2: string;
+}
+
+export interface KakaoRoadAddress {
+  address_name: string;
+  region_1depth_name: string;
+  region_2depth_name: string;
+  region_3depth_name: string;
+  road_name: string;
+  underground_yn: 'Y' | 'N';
+  main_building_no: string;
+  sub_building_no: string;
+  building_name: string;
+  zone_no: string;
+}
+
+export interface KakaoAddress {
+  address_name: string;
+  region_1depth_name: string;
+  region_2depth_name: string;
+  region_3depth_name: string;
+  mountain_yn: 'Y' | 'N';
+  main_address_no: string;
+  sub_address_no: string;
+  zip_code: string;
 }
 
 export interface KakaoMapResponse {
@@ -16,28 +43,8 @@ export interface KakaoMapResponse {
     total_count: number;
   };
   documents: Array<{
-    road_address: {
-      address_name: string;
-      region_1depth_name: string;
-      region_2depth_name: string;
-      region_3depth_name: string;
-      road_name: string;
-      underground_yn: 'Y' | 'N';
-      main_building_no: string;
-      sub_building_no: string;
-      building_name: string;
-      zone_no: string;
-    } | null;
-    address: {
-      address_name: string;
-      region_1depth_name: string;
-      region_2depth_name: string;
-      region_3depth_name: string;
-      mountain_yn: 'Y' | 'N';
-      main_address_no: string;
-      sub_address_no: string;
-      zip_code: string;
-    } | null;
+    road_address: KakaoRoadAddress | null;
+    address: KakaoAddress | null;
   }>;
 }
 
@@ -70,14 +77,12 @@ export class KakaoMapService {
     const [{ road_address, address }] = res.data.documents;
     if (!(road_address ?? address)) return null;
 
-    const { address_name, region_1depth_name } = (road_address ?? address) as {
-      address_name: string;
-      region_1depth_name: string;
-    };
+    const { region_1depth_name, region_2depth_name } = (road_address ??
+      address) as KakaoRoadAddress | KakaoAddress;
 
     return {
-      address: address_name,
-      region: region_1depth_name,
+      address1: region_1depth_name,
+      address2: region_2depth_name,
     };
   }
 }
