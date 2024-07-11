@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { KakaoMapService } from './kakao-map.service';
 import { ExtendedPrismaService } from '@/prisma/prisma.service';
 import { Coordinate, PostDto } from './post.dto';
+import { match, P } from 'ts-pattern';
 
 @Injectable()
 export class PostService {
@@ -11,7 +12,7 @@ export class PostService {
     private readonly kakaoMapService: KakaoMapService,
   ) {}
 
-  async fetch(): Promise<Array<PostDto>> {
+  async fetch(query: PostDto.Query): Promise<Array<PostDto>> {
     return (
       await this.prismaService.client.post.findMany({
         select: {
@@ -63,10 +64,24 @@ export class PostService {
         },
         where: {
           deletedAt: null,
+          categoryId: query.category,
+          companyId: query.brand,
+          address1: query.region,
         },
-        orderBy: {
-          createdAt: 'desc',
-        },
+        orderBy: match(query.sort)
+          .with(P.optional(PostDto.Sort.Latest), () => ({
+            publishedAt: 'desc' as const,
+          }))
+          .with(PostDto.Sort.Popular, () => {
+            throw new Error('Not implemented');
+          })
+          .with(PostDto.Sort.StartingSoon, () => ({
+            startedAt: 'asc' as const,
+          }))
+          .with(PostDto.Sort.EndingSoon, () => ({
+            endedAt: 'asc' as const,
+          }))
+          .exhaustive(),
       })
     ).map(({ lat, lng, _count: { likedUsers: likes }, ...rest }) => ({
       location: lat !== null && lng !== null ? [lat, lng] : null,
