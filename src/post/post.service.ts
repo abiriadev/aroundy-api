@@ -78,6 +78,20 @@ export class PostService {
           address1: region,
           isOnline: channel === PostDto.Channel.Online,
           isOffline: channel === PostDto.Channel.Offline,
+          ...match(state)
+            .with(PostDto.State.Ongoing, () => ({
+              startedAt: {
+                lte: new Date(),
+              },
+              endedAt: {
+                gte: new Date(),
+              },
+            }))
+            .with(PostDto.State.Ended, () => ({
+              endedAt: {
+                lte: new Date(),
+              },
+            })),
         },
         orderBy: match(sort)
           .with(P.optional(PostDto.Sort.Latest), () => ({
