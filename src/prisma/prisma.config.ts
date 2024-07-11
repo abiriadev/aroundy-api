@@ -16,7 +16,7 @@ import {
 
 const extendedPrismaClientFactory = ({ dbUrl }: ConfigService.Db) =>
   new PrismaClient({
-    datasourceUrl: dbUrl(),
+    datasourceUrl: dbUrl,
   }).$extends(
     kyselyExtension({
       kysely: (driver) =>

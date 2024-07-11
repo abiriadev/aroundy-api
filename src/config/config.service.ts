@@ -23,7 +23,7 @@ export namespace ConfigService {
     port: number = 3000;
 
     @IsString()
-    url(): string {
+    get url(): string {
       return `http://${this.host}:${this.port}`;
     }
 
@@ -58,7 +58,7 @@ export namespace ConfigService {
     dbDatabase: string = 'aroundy';
 
     @IsString()
-    dbUrl(): string {
+    get dbUrl(): string {
       return `postgresql://${this.dbUser}:${this.dbPassword}@${this.dbHost}:${this.dbPort}/${this.dbDatabase}`;
     }
   }
