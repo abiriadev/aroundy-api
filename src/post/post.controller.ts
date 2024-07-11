@@ -6,6 +6,7 @@ import {
   Body,
   Param,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostDto } from './post.dto';
@@ -25,7 +26,7 @@ export class PostController {
   @ApiTags('App', 'Admin')
   @Get()
   @ApiOperation({ summary: '포스트 목록 조회 및 검색' })
-  async fetch(): Promise<Array<PostDto>> {
+  async fetch(@Query() query: PostDto.Query): Promise<Array<PostDto>> {
     return await this.postService.fetch();
   }
 
