@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { AppController } from './app.controller';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { MetricController } from './metric.controller';
 
 @Module({
   imports: [
@@ -20,7 +21,9 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
     CategoryModule,
     TagModule,
     UserModule,
-    PrometheusModule.register(),
+    PrometheusModule.register({
+      controller: MetricController,
+    }),
   ],
   controllers: [AppController],
 })
