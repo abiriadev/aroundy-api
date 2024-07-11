@@ -4,13 +4,23 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@/config/config.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    cors: {
-      origin: '*',
+const bootstrap = async () => {
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter({
+      logger: true,
+    }),
+    {
+      cors: {
+        origin: '*',
+      },
     },
-  });
+  );
 
   const { port, host } = app.get(ConfigService.Network);
 
@@ -40,7 +50,8 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
   console.log(`Application is running on: ${port}`);
-}
+};
+
 bootstrap();
