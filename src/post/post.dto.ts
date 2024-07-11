@@ -18,6 +18,7 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
+import { paginate } from '@/common/paginated.dto';
 
 export type Coordinate = [number, number];
 
@@ -261,6 +262,10 @@ export namespace PostDto {
 
   export class Update extends PartialType(Create) {
     static name = 'Post Update';
+  }
+
+  export class Paginated extends paginate(PostDto) {
+    static name = 'Post Paginated';
   }
 
   export enum SearchRange {
