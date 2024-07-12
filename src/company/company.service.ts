@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CompanyDto } from './company.dto';
 import { ExtendedPrismaService } from '@/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CompanyService {
@@ -9,10 +10,10 @@ export class CompanyService {
     private readonly prismaService: ExtendedPrismaService,
   ) {}
 
-  async fetch(query: CompanyDto.Query) {
+  async fetch(query: CompanyDto.Query): Promise<CompanyDto.Paginated> {
     const { q, cursor } = query;
 
-    return await this.prismaService.client.company.findMany({
+    const prismaQuery = {
       select: {
         id: true,
         createdAt: true,
@@ -33,7 +34,21 @@ export class CompanyService {
         id: cursor,
       },
       take: query.toRawTake(),
-    });
+    } satisfies Prisma.CompanyFindManyArgs;
+
+    const [count, findMany] = await this.prismaService.client.$transaction([
+      this.prismaService.client.company.count({
+        where: prismaQuery.where,
+      }),
+      this.prismaService.client.company.findMany(prismaQuery),
+    ]);
+
+    return {
+      total: count,
+      next: findMany.at(-1)?.id ?? null,
+      prev: findMany.at(0)?.id ?? null,
+      items: findMany,
+    };
   }
 
   async create(company: CompanyDto.Create) {

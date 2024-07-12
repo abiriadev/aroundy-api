@@ -25,10 +25,8 @@ export class CompanyController {
   @ApiTags('App', 'Admin')
   @Get()
   @ApiOperation({ summary: '기업 목록 조회' })
-  async fetch(@Query() { q }: CompanyDto.Query): Promise<Array<CompanyDto>> {
-    return this.companyService.fetch({
-      contains: q,
-    });
+  async fetch(@Query() query: CompanyDto.Query): Promise<CompanyDto.Paginated> {
+    return this.companyService.fetch(query);
   }
 
   /**
