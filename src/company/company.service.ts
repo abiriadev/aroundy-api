@@ -9,7 +9,9 @@ export class CompanyService {
     private readonly prismaService: ExtendedPrismaService,
   ) {}
 
-  async fetch({ contains }: { contains?: string }) {
+  async fetch(query: CompanyDto.Query) {
+    const { q, cursor } = query;
+
     return await this.prismaService.client.company.findMany({
       select: {
         id: true,
@@ -21,12 +23,16 @@ export class CompanyService {
       where: {
         deletedAt: null,
         name: {
-          contains,
+          contains: q,
         },
       },
       orderBy: {
         createdAt: 'asc',
       },
+      cursor: {
+        id: cursor,
+      },
+      take: query.toRawTake(),
     });
   }
 

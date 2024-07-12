@@ -1,4 +1,6 @@
+import { Cursor } from '@/common/cursor.dto';
 import { Identifiable } from '@/common/identifiable.dto';
+import { paginate } from '@/common/paginated.dto';
 import { OmitType, PartialType } from '@nestjs/swagger';
 import { IsDate, IsOptional, IsString, IsUrl } from 'class-validator';
 
@@ -50,7 +52,11 @@ export namespace CompanyDto {
     static name = 'Company Update';
   }
 
-  export class Query {
+  export class Paginated extends paginate(CompanyDto) {
+    static name = 'Company Paginated';
+  }
+
+  export class Query extends Cursor {
     /**
      * 기업 검색에 사용할 검색어
      *
