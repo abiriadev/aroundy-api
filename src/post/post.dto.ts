@@ -21,6 +21,7 @@ import {
 } from 'class-validator';
 import { paginate } from '@/common/paginated.dto';
 import { Coordinate, IsCoordinate } from './coordinate.dto';
+import { Cursor } from '@/common/cursor.dto';
 
 export class PostDto extends Identifiable {
   static name = 'Post';
@@ -292,7 +293,7 @@ export namespace PostDto {
     EndingSoon = 'ending-soon',
   }
 
-  export class Query {
+  export class Query extends Cursor {
     /**
      * 포스트 검색에 사용할 검색어
      *
