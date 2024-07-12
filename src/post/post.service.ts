@@ -5,6 +5,7 @@ import { PostDto } from './post.dto';
 import { match, P } from 'ts-pattern';
 import { Prisma } from '@prisma/client';
 import { Coordinate } from './coordinate.dto';
+import { takeLimit } from '@/common/take.dto';
 
 @Injectable()
 export class PostService {
@@ -14,17 +15,20 @@ export class PostService {
     private readonly kakaoMapService: KakaoMapService,
   ) {}
 
-  async fetch({
-    q,
-    range,
-    category,
-    company,
-    channel,
-    state,
-    region,
-    sort,
-  }: PostDto.Query): Promise<PostDto.Paginated> {
-    const query = {
+  async fetch(query: PostDto.Query): Promise<PostDto.Paginated> {
+    const {
+      cursor,
+      q,
+      range,
+      category,
+      company,
+      channel,
+      state,
+      region,
+      sort,
+    } = query;
+
+    const prismaQuery = {
       select: {
         id: true,
         createdAt: true,
@@ -93,7 +97,7 @@ export class PostService {
             },
           }))
           .otherwise(() => ({})),
-        ...match([q, range])
+        ...match([query, range])
           .with([P.nonNullable, PostDto.SearchRange.Company], ([q]) => ({
             company: { name: { contains: q } },
           }))
@@ -126,13 +130,17 @@ export class PostService {
           endedAt: 'asc' as const,
         }))
         .exhaustive(),
+      cursor: {
+        id: cursor,
+      },
+      take: query.toRawTake(),
     } satisfies Prisma.PostFindManyArgs;
 
     const [count, findMany] = await this.prismaService.client.$transaction([
       this.prismaService.client.post.count({
-        where: query.where,
+        where: prismaQuery.where,
       }),
-      this.prismaService.client.post.findMany(query),
+      this.prismaService.client.post.findMany(prismaQuery),
     ]);
 
     const postprocessedFindMany = findMany.map(
@@ -148,8 +156,8 @@ export class PostService {
 
     return {
       total: count,
-      next: null,
-      prev: null,
+      next: postprocessedFindMany.at(-1)?.id ?? null,
+      prev: postprocessedFindMany.at(0)?.id ?? null,
       items: postprocessedFindMany,
     };
   }
