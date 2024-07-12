@@ -23,4 +23,14 @@ export class AuthController {
   async signin() {
     // todo!()
   }
+
+  /**
+   * 어드민 페이지 관리자용 로그인.
+   */
+  @ApiTags('Admin')
+  @Post('/signin/admin')
+  @ApiOperation({ summary: '관리자 로그인' })
+  async signinAdmin() {
+    // todo!()
+  }
 }
