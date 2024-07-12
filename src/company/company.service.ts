@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CompanyDto } from './company.dto';
 import { ExtendedPrismaService } from '@/prisma/prisma.service';
 
@@ -50,6 +50,18 @@ export class CompanyService {
   }
 
   async remove(id: string) {
+    const { deletedAt } =
+      await this.prismaService.client.company.findUniqueOrThrow({
+        select: { deletedAt: true },
+        where: { id },
+      });
+
+    if (deletedAt !== null)
+      throw new HttpException(
+        'The request company is already deleted.',
+        HttpStatus.NOT_FOUND,
+      );
+
     await this.prismaService.client.company.update({
       where: { id },
       data: { deletedAt: new Date() },
