@@ -1,4 +1,4 @@
-import { MinLength, IsInt, IsString, IsArray, IsEnum } from 'class-validator';
+import { MinLength, IsString, IsArray, IsEnum, IsPort } from 'class-validator';
 import { Type } from 'class-transformer';
 
 enum LogLevel {
@@ -18,7 +18,7 @@ export namespace ConfigService {
     @IsString()
     host: string = 'api.teambigbox.com';
 
-    @IsInt()
+    @IsPort()
     @Type(() => Number)
     port: number = 3000;
 
@@ -43,7 +43,7 @@ export namespace ConfigService {
     @IsString()
     dbHost: string = 'db';
 
-    @IsInt()
+    @IsPort()
     @Type(() => Number)
     dbPort: number = 5432;
 

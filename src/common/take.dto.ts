@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsPositive, Max } from 'class-validator';
+import { IsInt, IsOptional, IsPositive, Max, Min } from 'class-validator';
 
 export const takeLimit = 64;
 
@@ -11,7 +11,7 @@ export class Take {
    * @example 64
    */
   @IsInt()
-  @IsPositive()
+  @Min(0)
   @Max(takeLimit)
   @IsOptional()
   take?: number;

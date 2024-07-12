@@ -1,4 +1,4 @@
-import { IsNumber, IsUUID, ValidateNested } from 'class-validator';
+import { IsInt, IsUUID, Min, ValidateNested } from 'class-validator';
 import { mixin } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -7,7 +7,8 @@ export function paginate<T extends new () => {}>(dto: T) {
     /**
      * 검색된 전체 항목 갯수
      */
-    @IsNumber()
+    @IsInt()
+    @Min(0)
     total: number;
 
     /**
