@@ -34,7 +34,7 @@ export function paginate<T extends new () => {}>(dto: T) {
       isArray: true,
       type: dto,
     })
-    items: Array<T>;
+    items: Array<InstanceType<T>>;
   }
 
   return mixin(Paginated);
