@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@/config/config.service';
-import { Coordinate } from './post.dto';
+import { Coordinate } from './coordinate.dto';
 
 // NOTE: https://developers.kakao.com/docs/latest/ko/local/dev-guide#coord-to-address
 

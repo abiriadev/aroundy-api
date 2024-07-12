@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { KakaoMapService } from './kakao-map.service';
 import { ExtendedPrismaService } from '@/prisma/prisma.service';
-import { Coordinate, PostDto } from './post.dto';
+import { PostDto } from './post.dto';
 import { match, P } from 'ts-pattern';
 
 @Injectable()

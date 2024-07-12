@@ -16,11 +16,11 @@ import {
   IsUUID,
   MaxLength,
   Min,
+  Validate,
   ValidateNested,
 } from 'class-validator';
 import { paginate } from '@/common/paginated.dto';
-
-export type Coordinate = [number, number];
+import { Coordinate, IsCoordinate } from './coordinate.dto';
 
 export class PostDto extends Identifiable {
   static name = 'Post';
@@ -103,6 +103,7 @@ export class PostDto extends Identifiable {
    *
    * @example [37.51264278891025, 127.10246789395465]
    */
+  @Validate(IsCoordinate)
   @IsOptional()
   location: Coordinate | null;
 
