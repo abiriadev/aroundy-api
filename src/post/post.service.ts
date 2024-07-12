@@ -3,6 +3,8 @@ import { KakaoMapService } from './kakao-map.service';
 import { ExtendedPrismaService } from '@/prisma/prisma.service';
 import { PostDto } from './post.dto';
 import { match, P } from 'ts-pattern';
+import { Prisma } from '@prisma/client';
+import { Coordinate } from './coordinate.dto';
 
 @Injectable()
 export class PostService {
@@ -21,118 +23,135 @@ export class PostService {
     state,
     region,
     sort,
-  }: PostDto.Query): Promise<Array<PostDto>> {
-    return (
-      await this.prismaService.client.post.findMany({
-        select: {
-          id: true,
-          createdAt: true,
-          updatedAt: true,
-          title: true,
-          feeds: true,
-          caption: true,
-          contact: true,
-          publishedAt: true,
-          startedAt: true,
-          endedAt: true,
-          link: true,
-          views: true,
-          isOnline: true,
-          isOffline: true,
-          lat: true,
-          lng: true,
-          address1: true,
-          address2: true,
-          branch: true,
-          tags: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          category: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          company: {
-            select: {
-              id: true,
-              createdAt: true,
-              updatedAt: true,
-              name: true,
-              logo: true,
-            },
-          },
-          _count: {
-            select: {
-              likedUsers: true,
-            },
+  }: PostDto.Query): Promise<PostDto.Paginated> {
+    const query = {
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        title: true,
+        feeds: true,
+        caption: true,
+        contact: true,
+        publishedAt: true,
+        startedAt: true,
+        endedAt: true,
+        link: true,
+        views: true,
+        isOnline: true,
+        isOffline: true,
+        lat: true,
+        lng: true,
+        address1: true,
+        address2: true,
+        branch: true,
+        tags: {
+          select: {
+            id: true,
+            name: true,
           },
         },
-        where: {
-          categoryId: category,
-          companyId: company,
-          address1: region,
-          isOnline: channel === PostDto.Channel.Online,
-          isOffline: channel === PostDto.Channel.Offline,
-          ...match(state)
-            .with(PostDto.State.Ongoing, () => ({
-              startedAt: {
-                lte: new Date(),
-              },
-              endedAt: {
-                gte: new Date(),
-              },
-            }))
-            .with(PostDto.State.Ended, () => ({
-              endedAt: {
-                lte: new Date(),
-              },
-            }))
-            .otherwise(() => ({})),
-          ...match([q, range])
-            .with([P.nonNullable, PostDto.SearchRange.Company], ([q]) => ({
-              company: { name: { contains: q } },
-            }))
-            .with([P.nonNullable, PostDto.SearchRange.Title], ([q]) => ({
-              title: { contains: q },
-            }))
-            .with([P.nonNullable, PostDto.SearchRange.Caption], ([q]) => ({
-              caption: { contains: q },
-            }))
-            .with([P.nonNullable, undefined], ([q]) => ({
-              OR: [
-                { company: { name: { contains: q } } },
-                { title: { contains: q } },
-                { caption: { contains: q } },
-              ],
-            }))
-            .otherwise(() => ({})),
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
         },
-        orderBy: match(sort)
-          .with(P.optional(PostDto.Sort.Latest), () => ({
-            publishedAt: 'desc' as const,
+        company: {
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            name: true,
+            logo: true,
+          },
+        },
+        _count: {
+          select: {
+            likedUsers: true,
+          },
+        },
+      },
+      where: {
+        categoryId: category,
+        companyId: company,
+        address1: region,
+        isOnline: channel === PostDto.Channel.Online,
+        isOffline: channel === PostDto.Channel.Offline,
+        ...match(state)
+          .with(PostDto.State.Ongoing, () => ({
+            startedAt: {
+              lte: new Date(),
+            },
+            endedAt: {
+              gte: new Date(),
+            },
           }))
-          .with(PostDto.Sort.Popular, () => {
-            throw new Error('Not implemented');
-          })
-          .with(PostDto.Sort.StartingSoon, () => ({
-            startedAt: 'asc' as const,
+          .with(PostDto.State.Ended, () => ({
+            endedAt: {
+              lte: new Date(),
+            },
           }))
-          .with(PostDto.Sort.EndingSoon, () => ({
-            endedAt: 'asc' as const,
+          .otherwise(() => ({})),
+        ...match([q, range])
+          .with([P.nonNullable, PostDto.SearchRange.Company], ([q]) => ({
+            company: { name: { contains: q } },
           }))
-          .exhaustive(),
-      })
-    ).map(({ lat, lng, _count: { likedUsers: likes }, ...rest }) => ({
-      location: lat !== null && lng !== null ? [lat, lng] : null,
-      likes,
-      liked: false,
-      saved: false,
-      ...rest,
-    }));
+          .with([P.nonNullable, PostDto.SearchRange.Title], ([q]) => ({
+            title: { contains: q },
+          }))
+          .with([P.nonNullable, PostDto.SearchRange.Caption], ([q]) => ({
+            caption: { contains: q },
+          }))
+          .with([P.nonNullable, undefined], ([q]) => ({
+            OR: [
+              { company: { name: { contains: q } } },
+              { title: { contains: q } },
+              { caption: { contains: q } },
+            ],
+          }))
+          .otherwise(() => ({})),
+      },
+      orderBy: match(sort)
+        .with(P.optional(PostDto.Sort.Latest), () => ({
+          publishedAt: 'desc' as const,
+        }))
+        .with(PostDto.Sort.Popular, () => {
+          throw new Error('Not implemented');
+        })
+        .with(PostDto.Sort.StartingSoon, () => ({
+          startedAt: 'asc' as const,
+        }))
+        .with(PostDto.Sort.EndingSoon, () => ({
+          endedAt: 'asc' as const,
+        }))
+        .exhaustive(),
+    } satisfies Prisma.PostFindManyArgs;
+
+    const [count, findMany] = await this.prismaService.client.$transaction([
+      this.prismaService.client.post.count({
+        where: query.where,
+      }),
+      this.prismaService.client.post.findMany(query),
+    ]);
+
+    const postprocessedFindMany = findMany.map(
+      ({ lat, lng, _count: { likedUsers: likes }, ...rest }) => ({
+        location:
+          lat !== null && lng !== null ? ([lat, lng] as Coordinate) : null,
+        likes,
+        liked: false,
+        saved: false,
+        ...rest,
+      }),
+    );
+
+    return {
+      total: count,
+      next: null,
+      prev: null,
+      items: postprocessedFindMany,
+    };
   }
 
   async create({ location, tagIds, ...rest }: PostDto.Create) {
