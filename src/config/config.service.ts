@@ -1,6 +1,7 @@
 import {
   MinLength,
   IsString,
+  IsObject,
   IsArray,
   IsEnum,
   IsInt,
@@ -44,9 +45,54 @@ export namespace ConfigService {
 
   export class Auth {
     @IsString()
-    firebaseClientId: string;
+    type: string = 'service_account';
 
-    // TODO: fill information needed to use firebase admin SDK
+    @IsString()
+    project_id: string;
+
+    @IsString()
+    private_key_id: string;
+
+    @IsString()
+    private_key: string;
+
+    @IsString()
+    client_email: string;
+
+    @IsString()
+    client_id: string;
+
+    @IsString()
+    auth_uri: string = 'https://accounts.google.com/o/oauth2/auth';
+
+    @IsString()
+    token_uri: string = 'https://oauth2.googleapis.com/token';
+
+    @IsString()
+    auth_provider_x509_cert_url: string =
+      'https://www.googleapis.com/oauth2/v1/certs';
+
+    @IsString()
+    client_x509_cert_url: string;
+
+    @IsString()
+    universe_domain: string = 'googleapis.com';
+
+    @IsObject()
+    get credential(): Record<string, string> {
+      return {
+        type: this.type,
+        project_id: this.project_id,
+        private_key_id: this.private_key_id,
+        private_key: this.private_key,
+        client_email: this.client_email,
+        client_id: this.client_id,
+        auth_uri: this.auth_uri,
+        token_uri: this.token_uri,
+        auth_provider_x509_cert_url: this.auth_provider_x509_cert_url,
+        client_x509_cert_url: this.client_x509_cert_url,
+      };
+    }
   }
 
   export class Db {
