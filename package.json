@@ -40,6 +40,7 @@
     "change-case-commonjs": "^5.4.4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "firebase-admin": "^12.2.0",
     "kysely": "^0.27.3",
     "nest-typed-config": "^2.9.3",
     "nestjs-prisma": "^0.23.0",
