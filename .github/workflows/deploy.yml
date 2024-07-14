@@ -8,10 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Build Docker image
-        run: docker build -t aroundy-api:latest .
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -25,11 +23,12 @@ jobs:
         id: sha
       - name: Generate tag for the current build
         run: echo "REV_TAG=$(date +%Y.%m.%d-%H.%M.%S)-${{ steps.sha.outputs.sha }}" >> $GITHUB_ENV
-      - name: Tag images
-        run: |
-          docker tag aroundy-api:latest ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:$REV_TAG
-          docker tag aroundy-api:latest ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ github.ref_name }}
-      - name: Push to ECR
-        run: |
-          docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:$REV_TAG
-          docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ github.ref_name }}
+      - name: Build and push to ECR
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags:
+            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:$REV_TAG
+            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ github.ref_name }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
