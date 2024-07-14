@@ -48,49 +48,49 @@ export namespace ConfigService {
     type: string = 'service_account';
 
     @IsString()
-    project_id: string;
+    projectId: string;
 
     @IsString()
-    private_key_id: string;
+    privateKeyId: string;
 
     @IsString()
-    private_key: string;
+    privateKey: string;
 
     @IsString()
-    client_email: string;
+    clientEmail: string;
 
     @IsString()
-    client_id: string;
+    clientId: string;
 
     @IsString()
-    auth_uri: string = 'https://accounts.google.com/o/oauth2/auth';
+    authUri: string = 'https://accounts.google.com/o/oauth2/auth';
 
     @IsString()
-    token_uri: string = 'https://oauth2.googleapis.com/token';
+    tokenUri: string = 'https://oauth2.googleapis.com/token';
 
     @IsString()
-    auth_provider_x509_cert_url: string =
+    authProviderX509CertUrl: string =
       'https://www.googleapis.com/oauth2/v1/certs';
 
     @IsString()
-    client_x509_cert_url: string;
+    clientX509CertUrl: string;
 
     @IsString()
-    universe_domain: string = 'googleapis.com';
+    universeDomain: string = 'googleapis.com';
 
     @IsObject()
-    get credential(): Record<string, string> {
+    get credential() {
       return {
         type: this.type,
-        project_id: this.project_id,
-        private_key_id: this.private_key_id,
-        private_key: this.private_key,
-        client_email: this.client_email,
-        client_id: this.client_id,
-        auth_uri: this.auth_uri,
-        token_uri: this.token_uri,
-        auth_provider_x509_cert_url: this.auth_provider_x509_cert_url,
-        client_x509_cert_url: this.client_x509_cert_url,
+        project_id: this.projectId,
+        private_key_id: this.privateKeyId,
+        private_key: this.privateKey,
+        client_email: this.clientEmail,
+        client_id: this.clientId,
+        auth_uri: this.authUri,
+        token_uri: this.tokenUri,
+        auth_provider_x509_cert_url: this.authProviderX509CertUrl,
+        client_x509_cert_url: this.clientX509CertUrl,
       };
     }
   }
