@@ -9,9 +9,8 @@ export class AuthService {
   private app: App;
 
   constructor(private authConfigService: ConfigService.Auth) {
-    const credentials = this.authConfigService.credential;
     this.app = initializeApp({
-      credential: credential.cert(credentials),
+      credential: credential.cert(this.authConfigService.credential),
     });
   }
 

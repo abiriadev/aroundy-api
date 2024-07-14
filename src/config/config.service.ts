@@ -79,7 +79,7 @@ export namespace ConfigService {
     universeDomain: string = 'googleapis.com';
 
     @IsObject()
-    get credential() {
+    get credential(): Record<string, string> {
       return {
         type: this.type,
         project_id: this.projectId,
