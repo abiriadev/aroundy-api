@@ -21,12 +21,13 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
+      - uses: benjlevesque/short-sha@v3.0
+        id: sha
       - name: Generate tag for the current build
-        id: tag
-        run: echo "name=rev::$(date +%Y.%m.%d-%H.%M.%S)-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        run: echo "REV_TAG=$(date +%Y.%m.%d-%H.%M.%S)-${{ steps.sha.outputs.sha }}" >> $GITHUB_ENV
       - name: Tag images
         run: |
-          docker tag aroundy-api:latest ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ steps.tag.outputs.rev }}
+          docker tag aroundy-api:latest ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:$REV_TAG
           docker tag aroundy-api:latest ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ github.ref_name }}
       - name: Push to ECR
         run: |
