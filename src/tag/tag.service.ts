@@ -1,13 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'nestjs-prisma';
+import { Inject, Injectable } from '@nestjs/common';
 import { TagDto } from './tag.dto';
+import { ExtendedPrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
 export class TagService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    @Inject('PrismaService')
+    private readonly prismaService: ExtendedPrismaService,
+  ) {}
 
   async fetch() {
-    return await this.prismaService.tag.findMany({
+    return await this.prismaService.client.tag.findMany({
       select: {
         id: true,
         name: true,
@@ -19,7 +22,7 @@ export class TagService {
   }
 
   async create(data: TagDto.Create) {
-    await this.prismaService.tag.create({
+    await this.prismaService.client.tag.create({
       data,
     });
   }
