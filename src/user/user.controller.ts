@@ -6,7 +6,7 @@ import { Role } from '@/auth/roles.enum';
 import { UserId } from '@/auth/userid.decorator';
 import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
