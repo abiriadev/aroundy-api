@@ -5,3 +5,4 @@
 !/tsconfig.json
 !/src
 !/prisma
+!/Dockerfile
