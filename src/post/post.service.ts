@@ -97,7 +97,7 @@ export class PostService {
             },
           }))
           .otherwise(() => ({})),
-        ...match([query, range])
+        ...match([q, range])
           .with([P.nonNullable, PostDto.SearchRange.Company], ([q]) => ({
             company: { name: { contains: q } },
           }))
