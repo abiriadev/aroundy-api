@@ -8,8 +8,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
@@ -31,7 +29,6 @@ jobs:
       - name: Build and push to ECR
         uses: docker/build-push-action@v6
         with:
-          context: .
           push: true
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ steps.tag.outputs.rev }}
