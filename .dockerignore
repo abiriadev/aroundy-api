@@ -1,0 +1,7 @@
+*
+!/package.json
+!/pnpm-lock.yaml
+!/nest-cli.json
+!/tsconfig.json
+!/src
+!/prisma
