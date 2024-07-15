@@ -5,7 +5,7 @@ import { PostDto } from './post.dto';
 import { match, P } from 'ts-pattern';
 import { Prisma } from '@prisma/client';
 import { Coordinate } from './coordinate.dto';
-import { takeLimit } from '@/common/take.dto';
+import { Take } from '@/common/take.dto';
 
 @Injectable()
 export class PostService {
@@ -130,10 +130,13 @@ export class PostService {
           endedAt: 'asc' as const,
         }))
         .exhaustive(),
-      cursor: {
-        id: cursor,
-      },
-      take: query.toRawTake(),
+      cursor:
+        cursor !== undefined
+          ? {
+              id: cursor,
+            }
+          : undefined,
+      take: Take.toRawTake(query),
     } satisfies Prisma.PostFindManyArgs;
 
     const [count, findMany] = await this.prismaService.client.$transaction([

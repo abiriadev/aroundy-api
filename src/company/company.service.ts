@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CompanyDto } from './company.dto';
 import { ExtendedPrismaService } from '@/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
+import { Take } from '@/common/take.dto';
 
 @Injectable()
 export class CompanyService {
@@ -30,10 +31,13 @@ export class CompanyService {
       orderBy: {
         createdAt: 'asc',
       },
-      cursor: {
-        id: cursor,
-      },
-      take: query.toRawTake(),
+      cursor:
+        cursor !== undefined
+          ? {
+              id: cursor,
+            }
+          : undefined,
+      take: Take.toRawTake(query),
     } satisfies Prisma.CompanyFindManyArgs;
 
     const [count, findMany] = await this.prismaService.client.$transaction([

@@ -23,13 +23,6 @@ export class Take {
    */
   @IsOptional()
   direction?: Take.Direction;
-
-  toRawTake() {
-    return (
-      (this.take ?? takeLimit) *
-      (this.direction === Take.Direction.Backward ? -1 : 1)
-    );
-  }
 }
 
 export namespace Take {
@@ -37,4 +30,11 @@ export namespace Take {
     Forward = 'forward',
     Backward = 'backward',
   }
+
+  export const toRawTake = (take: Take) => {
+    return (
+      (take.take ?? takeLimit) *
+      (take.direction === Take.Direction.Backward ? -1 : 1)
+    );
+  };
 }
