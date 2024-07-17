@@ -25,6 +25,9 @@ export class AuthService {
     _token: string,
   ): Promise<{ auth: boolean; role: Role; uid: string }> {
     const decodedToken = await getAuth(this.app).verifyIdToken(_token);
+    const user = await getAuth(this.app).getUser(decodedToken.uid);
+    const role = user.customClaims?.role;
+
     if (!decodedToken) return { auth: false, role: Role.Unknown, uid: '' };
 
     // update `recentlyLoggedInAt` field after successful signin
@@ -36,9 +39,9 @@ export class AuthService {
     // return the role of the user from custom claims
     // if the user has no role, return 'user' role
 
-    if (decodedToken.role === 'admin') {
+    if (role === 'admin') {
       return { auth: true, role: Role.Admin, uid: decodedToken.uid };
-    } else if (decodedToken.role === 'biz') {
+    } else if (role === 'biz') {
       return { auth: true, role: Role.Biz, uid: decodedToken.uid };
     } else {
       return { auth: true, role: Role.User, uid: decodedToken.uid };
