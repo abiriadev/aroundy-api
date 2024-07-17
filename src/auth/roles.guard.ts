@@ -1,16 +1,9 @@
-import {
-  Injectable,
-  CanActivate,
-  ExecutionContext,
-  SetMetadata,
-} from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { match, P } from 'ts-pattern';
 import { Role } from './roles.enum';
 import { ROLES_KEY } from './roles.decorator';
 import { AuthService } from './auth.service';
-
-export const cookieKey = 'AUTHORIZATION';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -19,7 +12,7 @@ export class RolesGuard implements CanActivate {
     private authService: AuthService,
   ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const roles = this.reflector.getAllAndOverride<Array<Role>>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -32,23 +25,18 @@ export class RolesGuard implements CanActivate {
 
     const token = authHeader.split(' ')[1];
 
-    if (!this.authService.verifyToken(token)) return false;
+    const { auth, role, uid } = await this.authService.verifyToken(token);
+    if (!auth) return false;
 
-    // TODO: this is naive, demonstration-only implementation:
-    // current implementation assumes the cookie value will be either 'admin' or 'user' which are plaintexts.
-    // It should be token issued by firebase, and should be verified by firebase admin SDK here.
-    // Also, we should know whether the incoming requet has admin or user role.
-    // If it has user role, we have to register `userId` property to the request object
-    // so that we can access the userId information it in the controller via `@UserId`.
-    return match([token, roles])
+    req.uid = uid;
+
+    return match(roles)
+      .with([Role.Admin], () => role === Role.Admin)
+      .with([Role.User], () => true)
       .with(
-        ['admin', P.when((roles) => roles.includes(Role.Admin))],
-        () => true,
+        [Role.Admin, Role.User],
+        () => role === Role.Admin || role === Role.User,
       )
-      .with(['user', P.when((roles) => roles.includes(Role.User))], () => {
-        req.userId = '0';
-        return true;
-      })
       .otherwise(() => false);
   }
 }
