@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { match, P } from 'ts-pattern';
+import { match } from 'ts-pattern';
 import { Role } from './roles.enum';
 import { ROLES_KEY } from './roles.decorator';
 import { AuthService } from './auth.service';
@@ -32,11 +32,8 @@ export class RolesGuard implements CanActivate {
 
     return match(roles)
       .with([Role.Admin], () => role === Role.Admin)
+      .with([Role.Biz], () => role !== Role.Biz)
       .with([Role.User], () => true)
-      .with(
-        [Role.Admin, Role.User],
-        () => role === Role.Admin || role === Role.User,
-      )
       .otherwise(() => false);
   }
 }

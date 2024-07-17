@@ -38,6 +38,8 @@ export class AuthService {
 
     if (decodedToken.role === 'admin') {
       return { auth: true, role: Role.Admin, uid: decodedToken.uid };
+    } else if (decodedToken.role === 'biz') {
+      return { auth: true, role: Role.Biz, uid: decodedToken.uid };
     } else {
       return { auth: true, role: Role.User, uid: decodedToken.uid };
     }
