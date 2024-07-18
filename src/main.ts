@@ -8,6 +8,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { LoggerService } from './logger/logger.service';
 
 const bootstrap = async () => {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -21,6 +22,8 @@ const bootstrap = async () => {
       },
     },
   );
+
+  app.useLogger(app.get(LoggerService));
 
   const { port, url } = app.get(ConfigService.Network);
 
