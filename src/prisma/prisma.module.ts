@@ -3,11 +3,16 @@ import {
   CustomPrismaModule,
   providePrismaClientExceptionFilter,
 } from 'nestjs-prisma';
-import { prismaConfig } from './prisma.config';
+import { ExtendedPrismaClient, prismaConfig } from './prisma.config';
 import { ConfigModule } from '@/config/config.module';
+import { LoggerModule } from '@/logger/logger.module';
 
 @Module({
-  imports: [ConfigModule, CustomPrismaModule.forRootAsync(prismaConfig)],
+  imports: [
+    ConfigModule,
+    LoggerModule,
+    CustomPrismaModule.forRootAsync<ExtendedPrismaClient>(prismaConfig),
+  ],
   providers: [providePrismaClientExceptionFilter()],
   exports: [CustomPrismaModule], // reexport inject-container
 })

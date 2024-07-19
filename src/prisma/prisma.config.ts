@@ -11,12 +11,15 @@ import {
   PostgresQueryCompiler,
 } from 'kysely';
 import { match, P } from 'ts-pattern';
+import { LoggerModule } from '@/logger/logger.module';
+import { LoggerService } from '@/logger/logger.service';
 
 const extendedPrismaClientFactory = (
   { dbUrl }: ConfigService.Db,
   { logLevel }: ConfigService.App,
-) =>
-  new PrismaClient({
+  logger: LoggerService,
+) => {
+  const client = new PrismaClient({
     datasourceUrl: dbUrl,
     log: [
       {
@@ -29,7 +32,11 @@ const extendedPrismaClientFactory = (
           .exhaustive(),
       },
     ],
-  }).$extends(
+  });
+
+  client.$on('query', (e) => logger.verbose({ type: 'prisma', ...e }));
+
+  return client.$extends(
     kyselyExtension({
       kysely: (driver) =>
         new Kysely<DB>({
@@ -43,6 +50,7 @@ const extendedPrismaClientFactory = (
         }),
     }),
   );
+};
 
 export type ExtendedPrismaClient = ReturnType<
   typeof extendedPrismaClientFactory
@@ -50,7 +58,7 @@ export type ExtendedPrismaClient = ReturnType<
 
 export const prismaConfig = {
   name: 'PrismaService',
-  imports: [ConfigModule],
-  inject: [ConfigService.Db, ConfigService.App],
+  imports: [ConfigModule, LoggerModule],
+  inject: [ConfigService.Db, ConfigService.App, LoggerService],
   useFactory: extendedPrismaClientFactory,
 } satisfies CustomPrismaModuleAsyncOptions<ExtendedPrismaClient>;
