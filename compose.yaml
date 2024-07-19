@@ -8,14 +8,23 @@ services:
     environment:
       - HOST
       - PORT
-      - JWT_SECRET
-      - JWT_EXPIRY
-      - PEPPER
+      - TYPE
+      - PROJECT_ID
+      - PRIVATE_KEY_ID
+      - PRIVATE_KEY
+      - CLIENT_EMAIL
+      - CLIENT_ID
+      - AUTH_URI
+      - TOKEN_URI
+      - AUTH_PROVIDER_X509_CERT_URL
+      - CLIENT_X509_CERT_URL
+      - UNIVERSE_DOMAIN
       - DB_HOST
       - DB_PORT
       - DB_USER
       - DB_PASSWORD
       - DB_DATABASE
+      - KAKAO_API_KEY
   db:
     image: postgres:16.3-alpine3.20
     restart: always

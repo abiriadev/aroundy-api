@@ -24,6 +24,8 @@ RUN pnpm build \
 
 FROM node:20.15.1-alpine3.20 AS runner
 
+ARG tag
+
 # create a non-root user
 USER node
 WORKDIR /home/node
@@ -33,5 +35,6 @@ COPY --from=builder --chown=node:node /src/node_modules/ ./node_modules/
 COPY --from=builder --chown=node:node /src/dist/src ./
 
 ENV NODE_ENV=production
+ENV IMAGE_TAG=$tag
 
 CMD ["node", "./main.js"]
