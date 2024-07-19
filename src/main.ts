@@ -9,13 +9,14 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { LoggerService } from './logger/logger.service';
+import fastify from 'fastify';
 
 const bootstrap = async () => {
+  const rawFastify = await fastify();
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter({
-      logger: true,
-    }),
+    new FastifyAdapter(rawFastify),
     {
       cors: {
         origin: '*',
@@ -23,7 +24,36 @@ const bootstrap = async () => {
     },
   );
 
-  app.useLogger(app.get(LoggerService));
+  const logger = app.get(LoggerService);
+  app.useLogger(logger);
+
+  rawFastify.addHook(
+    'preValidation',
+    ({ method, url, query, headers, body, ip }, _, next) => {
+      logger.log({
+        type: 'request',
+        ip,
+        method,
+        path: url,
+        query,
+        headers,
+        body,
+      });
+      next();
+    },
+  );
+
+  rawFastify.addHook(
+    'preSerialization',
+    (_, { statusCode }, payload, next) => (
+      logger.log({
+        type: 'response',
+        statusCode,
+        body: payload,
+      }),
+      next()
+    ),
+  );
 
   const { port, url } = app.get(ConfigService.Network);
 
@@ -55,7 +85,8 @@ const bootstrap = async () => {
   );
 
   await app.listen(port, '0.0.0.0');
-  console.log(`Application is running on: ${port}`);
+
+  logger.log(`Application is running on: ${port}`);
 };
 
 bootstrap();
