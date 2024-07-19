@@ -21,15 +21,15 @@ export class LoggerService implements NestLoggerService {
     this.tslog.warn(message, ...optionalParams);
   }
 
-  debug?(message: unknown, ...optionalParams: unknown[]) {
+  debug(message: unknown, ...optionalParams: unknown[]) {
     this.tslog.debug(message, ...optionalParams);
   }
 
-  verbose?(message: unknown, ...optionalParams: unknown[]) {
+  verbose(message: unknown, ...optionalParams: unknown[]) {
     this.tslog.trace(message, ...optionalParams);
   }
 
-  fatal?(message: unknown, ...optionalParams: unknown[]) {
+  fatal(message: unknown, ...optionalParams: unknown[]) {
     this.tslog.fatal(message, ...optionalParams);
   }
 

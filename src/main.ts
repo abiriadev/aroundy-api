@@ -30,7 +30,7 @@ const bootstrap = async () => {
   rawFastify.addHook(
     'preValidation',
     ({ method, url, query, headers, body, ip }, _, next) => {
-      logger.log({
+      logger.verbose({
         type: 'request',
         ip,
         method,
@@ -46,7 +46,7 @@ const bootstrap = async () => {
   rawFastify.addHook(
     'preSerialization',
     (_, { statusCode }, payload, next) => (
-      logger.log({
+      logger.verbose({
         type: 'response',
         statusCode,
         body: payload,
