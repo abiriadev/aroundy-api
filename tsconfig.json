@@ -10,6 +10,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    "inlineSourceMap": true, // required to map logs to the original ts source file
     "strict": true,
     "strictPropertyInitialization": false,
     "forceConsistentCasingInFileNames": true,
