@@ -6,6 +6,8 @@ services:
     ports:
       - 80:$PORT
     environment:
+      - LOG_LEVEL
+      - LOG_FORMAT
       - HOST
       - PORT
       - TYPE
