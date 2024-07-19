@@ -1,13 +1,24 @@
-import {
-  Injectable,
-  LogLevel,
-  LoggerService as NestLoggerService,
-} from '@nestjs/common';
+import { ConfigService, LogLevel } from '@/config/config.service';
+import { Injectable, LoggerService as NestLoggerService } from '@nestjs/common';
+import { match } from 'ts-pattern';
 import { Logger } from 'tslog';
 
 @Injectable()
 export class LoggerService implements NestLoggerService {
-  private readonly tslog = new Logger();
+  private readonly tslog;
+
+  constructor(private readonly appConfigService: ConfigService.App) {
+    this.tslog = new Logger({
+      minLevel: match(appConfigService.level)
+        .with(LogLevel.TRACE, () => 1)
+        .with(LogLevel.DEBUG, () => 2)
+        .with(LogLevel.INFO, () => 3)
+        .with(LogLevel.WARN, () => 4)
+        .with(LogLevel.ERROR, () => 5)
+        .with(LogLevel.FATAL, () => 6)
+        .exhaustive(),
+    });
+  }
 
   log(message: unknown, ...optionalParams: unknown[]) {
     this.tslog.info(message, ...optionalParams);
