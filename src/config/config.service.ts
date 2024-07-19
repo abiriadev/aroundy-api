@@ -20,10 +20,18 @@ export enum LogLevel {
   FATAL = 'fatal',
 }
 
+export enum LogFormat {
+  JSON = 'json',
+  PRETTY = 'pretty',
+}
+
 export namespace ConfigService {
   export class App {
     @IsEnum(LogLevel)
-    level: LogLevel = LogLevel.INFO;
+    log_level: LogLevel = LogLevel.INFO;
+
+    @IsEnum(LogFormat)
+    log_format: LogFormat = LogFormat.JSON;
 
     @IsString()
     @IsOptional()
