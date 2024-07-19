@@ -17,7 +17,7 @@ import { LoggerService } from '@/logger/logger.service';
 const extendedPrismaClientFactory = (
   { dbUrl }: ConfigService.Db,
   { logLevel }: ConfigService.App,
-  logger: LoggerService,
+  loggerService: LoggerService,
 ) => {
   const client = new PrismaClient({
     datasourceUrl: dbUrl,
@@ -34,7 +34,9 @@ const extendedPrismaClientFactory = (
     ],
   });
 
-  client.$on('query', (e) => logger.verbose({ type: 'prisma', ...e }));
+  const logger = loggerService.context('prisma');
+
+  client.$on('query', (e) => logger.verbose(e));
 
   return client.$extends(
     kyselyExtension({
