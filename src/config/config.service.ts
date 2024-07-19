@@ -50,7 +50,7 @@ export namespace ConfigService {
 
     @IsString()
     get url(): string {
-      return `http://${this.host}:${this.port}`;
+      return `https://${this.host}`;
     }
 
     @IsArray()
