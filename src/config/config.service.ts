@@ -7,20 +7,27 @@ import {
   IsInt,
   Min,
   Max,
+  IsOptional,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-enum LogLevel {
+export enum LogLevel {
+  TRACE = 'trace',
   DEBUG = 'debug',
   INFO = 'info',
   WARN = 'warn',
   ERROR = 'error',
+  FATAL = 'fatal',
 }
 
 export namespace ConfigService {
   export class App {
     @IsEnum(LogLevel)
     level: LogLevel = LogLevel.INFO;
+
+    @IsString()
+    @IsOptional()
+    tag?: string;
   }
 
   export class Network {

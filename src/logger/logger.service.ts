@@ -1,5 +1,9 @@
 import { ConfigService, LogLevel } from '@/config/config.service';
-import { Injectable, LoggerService as NestLoggerService } from '@nestjs/common';
+import {
+  Injectable,
+  LoggerService as NestLoggerService,
+  LogLevel as NestLogLevel,
+} from '@nestjs/common';
 import { match } from 'ts-pattern';
 import { Logger } from 'tslog';
 
@@ -44,7 +48,7 @@ export class LoggerService implements NestLoggerService {
     this.tslog.fatal(message, ...optionalParams);
   }
 
-  setLogLevels?(_levels: LogLevel[]) {
+  setLogLevels(_levels: NestLogLevel[]) {
     throw new Error('Method not implemented.');
   }
 }
