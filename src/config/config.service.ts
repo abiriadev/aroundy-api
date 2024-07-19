@@ -35,7 +35,7 @@ export namespace ConfigService {
 
     @IsString()
     @IsOptional()
-    tag?: string;
+    imageTag?: string;
   }
 
   export class Network {
