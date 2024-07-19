@@ -13,7 +13,7 @@ export class LoggerService implements NestLoggerService {
 
   constructor(private readonly appConfigService: ConfigService.App) {
     this.tslog = new Logger({
-      minLevel: match(appConfigService.level)
+      minLevel: match(appConfigService.logLevel)
         .with(LogLevel.TRACE, () => 1)
         .with(LogLevel.DEBUG, () => 2)
         .with(LogLevel.INFO, () => 3)
@@ -21,6 +21,7 @@ export class LoggerService implements NestLoggerService {
         .with(LogLevel.ERROR, () => 5)
         .with(LogLevel.FATAL, () => 6)
         .exhaustive(),
+      type: appConfigService.logFormat,
     });
   }
 
