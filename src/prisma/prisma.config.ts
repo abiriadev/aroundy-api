@@ -1,8 +1,5 @@
-import {
-  CustomPrismaModuleAsyncOptions,
-  CustomPrismaService,
-} from 'nestjs-prisma';
-import { ConfigService } from '@/config/config.service';
+import { CustomPrismaModuleAsyncOptions } from 'nestjs-prisma';
+import { ConfigService, LogLevel } from '@/config/config.service';
 import { ConfigModule } from '@/config/config.module';
 import kyselyExtension from 'prisma-extension-kysely';
 import { PrismaClient } from '@prisma/client';
@@ -13,10 +10,25 @@ import {
   PostgresIntrospector,
   PostgresQueryCompiler,
 } from 'kysely';
+import { match, P } from 'ts-pattern';
 
-const extendedPrismaClientFactory = ({ dbUrl }: ConfigService.Db) =>
+const extendedPrismaClientFactory = (
+  { dbUrl }: ConfigService.Db,
+  { logLevel }: ConfigService.App,
+) =>
   new PrismaClient({
     datasourceUrl: dbUrl,
+    log: [
+      {
+        emit: 'event',
+        level: match(logLevel)
+          .with(LogLevel.TRACE, () => 'query' as const)
+          .with(P.union(LogLevel.DEBUG, LogLevel.INFO), () => 'info' as const)
+          .with(LogLevel.WARN, () => 'warn' as const)
+          .with(P.union(LogLevel.ERROR, LogLevel.FATAL), () => 'error' as const)
+          .exhaustive(),
+      },
+    ],
   }).$extends(
     kyselyExtension({
       kysely: (driver) =>
@@ -39,6 +51,6 @@ export type ExtendedPrismaClient = ReturnType<
 export const prismaConfig = {
   name: 'PrismaService',
   imports: [ConfigModule],
-  inject: [ConfigService.Db],
+  inject: [ConfigService.Db, ConfigService.App],
   useFactory: extendedPrismaClientFactory,
 } satisfies CustomPrismaModuleAsyncOptions<ExtendedPrismaClient>;
