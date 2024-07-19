@@ -28,10 +28,10 @@ export enum LogFormat {
 export namespace ConfigService {
   export class App {
     @IsEnum(LogLevel)
-    log_level: LogLevel = LogLevel.INFO;
+    logLevel: LogLevel = LogLevel.INFO;
 
     @IsEnum(LogFormat)
-    log_format: LogFormat = LogFormat.JSON;
+    logFormat: LogFormat = LogFormat.JSON;
 
     @IsString()
     @IsOptional()
