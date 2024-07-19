@@ -24,14 +24,17 @@ const bootstrap = async () => {
     },
   );
 
-  const logger = app.get(LoggerService);
-  app.useLogger(logger);
+  const loggerService = app.get(LoggerService);
+  app.useLogger(loggerService);
+
+  const httpLogger = loggerService.context('http');
 
   rawFastify.addHook(
     'preValidation',
-    ({ method, url, query, headers, body, ip }, _, next) => {
-      logger.verbose({
+    ({ id, method, url, query, headers, body, ip }, _, next) => {
+      httpLogger.verbose({
         type: 'request',
+        id,
         ip,
         method,
         path: url,
@@ -46,7 +49,7 @@ const bootstrap = async () => {
   rawFastify.addHook(
     'preSerialization',
     (_, { statusCode }, payload, next) => (
-      logger.verbose({
+      httpLogger.verbose({
         type: 'response',
         statusCode,
         body: payload,
@@ -86,7 +89,7 @@ const bootstrap = async () => {
 
   await app.listen(port, '0.0.0.0');
 
-  logger.log(`Application is running on: ${port}`);
+  loggerService.log(`Application is running on: ${port}`);
 };
 
 bootstrap();
