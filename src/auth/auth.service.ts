@@ -1,19 +1,50 @@
 import { ConfigService } from '@/config/config.service';
 import { ExtendedPrismaService } from '@/prisma/prisma.service';
 import { Inject, Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
 import { App, initializeApp } from 'firebase-admin/app';
 import { credential } from 'firebase-admin';
 import { getAuth } from 'firebase-admin/auth';
 import { Role } from './roles.enum';
+import { createHash } from 'crypto';
+import { firstValueFrom } from 'rxjs';
+import exp from 'constants';
+
+export interface KakaoUser {
+  id: number;
+  expires_in: number;
+  app_id: number;
+}
+
+export interface NaverUser {
+  resultcode: string;
+  message: string;
+  response: {
+    id: string;
+    nickname: string;
+    name: string;
+    email: string;
+    gender: string;
+    age: string;
+    birthday: string;
+    profile_image: string;
+    birthyear: string;
+    mobile: string;
+  };
+}
 
 @Injectable()
 export class AuthService {
   private app: App;
+  private static KAKAO_API_URL =
+    'https://kapi.kakao.com/v1/user/access_token_info';
+  private static NAVER_API_URL = 'https://openapi.naver.com/v1/nid/me';
 
   constructor(
     @Inject('PrismaService')
     private readonly prismaService: ExtendedPrismaService,
     private authConfigService: ConfigService.Auth,
+    private readonly httpService: HttpService,
   ) {
     this.app = initializeApp({
       credential: credential.cert(this.authConfigService.credential),
@@ -46,5 +77,75 @@ export class AuthService {
     } else {
       return { auth: true, role: Role.User, uid: decodedToken.uid };
     }
+  }
+
+  generateUidHash(input: string): string {
+    let hash = createHash('sha256').update(input).digest('base64');
+    hash = hash.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    return hash.substring(0, 28);
+  }
+
+  async createUser(uid: string): Promise<void> {
+    // if user exists, return
+    let user = await getAuth(this.app)
+      .getUser(uid)
+      .catch(() => null);
+    if (user) return;
+
+    // create user
+    user = await getAuth(this.app).createUser({
+      uid,
+    });
+
+    // set custom claims
+    await getAuth(this.app).setCustomUserClaims(uid, {
+      role: 'user',
+    });
+
+    // create user in database
+    // todo!()
+  }
+
+  async getKakaoUser(kakaoToken: string): Promise<string> {
+    // get user id from kakao
+    const res = await firstValueFrom(
+      this.httpService.get<KakaoUser>(AuthService.KAKAO_API_URL, {
+        headers: {
+          Authorization: `Bearer ${kakaoToken}`,
+        },
+      }),
+    );
+
+    if (res.data.id) {
+      const uid = this.generateUidHash(res.data.id.toString());
+      this.createUser(uid);
+      return uid;
+    } else {
+      return '';
+    }
+  }
+
+  async getNaverUser(naverToken: string): Promise<string> {
+    // get user id from naver
+    const res = await firstValueFrom(
+      this.httpService.get<NaverUser>(AuthService.NAVER_API_URL, {
+        headers: {
+          Authorization: `Bearer ${naverToken}`,
+        },
+      }),
+    );
+
+    if (res.data.response.id) {
+      const uid = this.generateUidHash(res.data.response.id);
+      this.createUser(uid);
+      return uid;
+    } else {
+      return '';
+    }
+  }
+
+  async createCustomToken(uid: string): Promise<string> {
+    if (!uid) return '';
+    return getAuth(this.app).createCustomToken(uid);
   }
 }
