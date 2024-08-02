@@ -111,6 +111,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^6.21.0
         version: 6.21.0(eslint@8.57.0)(typescript@5.5.2)
+      docker-compose:
+        specifier: ^0.24.8
+        version: 0.24.8
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -2006,6 +2009,10 @@ packages:
   dir-glob@3.0.1:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
     engines: {node: '>=8'}
+
+  docker-compose@0.24.8:
+    resolution: {integrity: sha512-plizRs/Vf15H+GCVxq2EUvyPK7ei9b/cVesHvjnX4xaXjM9spHe2Ytq0BitndFgvTJ3E3NljPNUEl7BAN43iZw==}
+    engines: {node: '>= 6.0.0'}
 
   doctrine@3.0.0:
     resolution: {integrity: sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==}
@@ -6916,6 +6923,10 @@ snapshots:
     dependencies:
       path-type: 4.0.0
 
+  docker-compose@0.24.8:
+    dependencies:
+      yaml: 2.4.5
+
   doctrine@3.0.0:
     dependencies:
       esutils: 2.0.3
@@ -9720,8 +9731,7 @@ snapshots:
 
   yallist@4.0.0: {}
 
-  yaml@2.4.5:
-    optional: true
+  yaml@2.4.5: {}
 
   yargs-parser@20.2.9: {}
 
