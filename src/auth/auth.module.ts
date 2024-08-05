@@ -4,9 +4,10 @@ import { RolesGuard } from './roles.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthController } from './auth.controller';
 import { PrismaModule } from '@/prisma/prisma.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, HttpModule],
   providers: [
     AuthService,
     {
