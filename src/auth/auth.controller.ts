@@ -11,7 +11,7 @@ export class AuthController {
    */
   @ApiTags('App')
   @Post('/naver')
-  @ApiOperation({ summary: '네이버 소셜 로그인' })
+  @ApiOperation({ summary: '네이버 소셜 로그인', operationId: 'loginNaver' })
   async naverLogin(@Headers('authorization') authHeader: string) {
     const token = this.extractTokenFromHeader(authHeader);
     const uid = await this.authService.getNaverUser(token);
@@ -24,7 +24,7 @@ export class AuthController {
    */
   @ApiTags('App')
   @Post('/kakao')
-  @ApiOperation({ summary: '카카오 소셜 로그인' })
+  @ApiOperation({ summary: '카카오 소셜 로그인', operationId: 'loginKakao' })
   async kakaoLogin(@Headers('authorization') authHeader: string) {
     const token = this.extractTokenFromHeader(authHeader);
     const uid = await this.authService.getKakaoUser(token);
