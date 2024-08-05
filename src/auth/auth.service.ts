@@ -8,7 +8,6 @@ import { getAuth } from 'firebase-admin/auth';
 import { Role } from './roles.enum';
 import { createHash } from 'crypto';
 import { firstValueFrom } from 'rxjs';
-import exp from 'constants';
 
 export interface KakaoUser {
   id: number;
@@ -103,7 +102,13 @@ export class AuthService {
     });
 
     // create user in database
-    // todo!()
+    this.prismaService.client.user.create({
+      data: {
+        uid,
+        oauthProvider: 'custom',
+        recentlyLoggedInAt: new Date(),
+      },
+    });
   }
 
   async getKakaoUser(kakaoToken: string): Promise<string> {
