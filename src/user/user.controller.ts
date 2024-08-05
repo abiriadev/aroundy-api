@@ -17,7 +17,7 @@ export class UserController {
   @Get()
   @ApiCookieAuth()
   @Roles(Role.Admin)
-  @ApiOperation({ summary: '가입한 유저 목록 조회' })
+  @ApiOperation({ summary: '가입한 유저 목록 조회', operationId: 'fetchUsers' })
   async fetch(): Promise<Array<UserDto>> {
     return this.userService.fetch();
   }
@@ -29,7 +29,10 @@ export class UserController {
   @Get('profile')
   @ApiCookieAuth()
   @Roles(Role.User)
-  @ApiOperation({ summary: '로그인한 유저 프로필 조회' })
+  @ApiOperation({
+    summary: '로그인한 유저 프로필 조회',
+    operationId: 'getProfile',
+  })
   async profile(@UserId() userId: string): Promise<UserDto.Profile> {
     return this.userService.profile(userId);
   }
@@ -41,7 +44,7 @@ export class UserController {
   @Delete()
   @ApiCookieAuth()
   @Roles(Role.User)
-  @ApiOperation({ summary: '회원 탈퇴' })
+  @ApiOperation({ summary: '회원 탈퇴', operationId: 'deleteUser' })
   async remove(@UserId() userId: string) {
     return this.userService.remove(userId);
   }
