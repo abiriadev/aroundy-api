@@ -24,7 +24,7 @@ export class CompanyController {
    */
   @ApiTags('App', 'Admin')
   @Get()
-  @ApiOperation({ summary: '기업 목록 조회' })
+  @ApiOperation({ summary: '기업 목록 조회', operationId: 'fetchCompanies' })
   async fetch(@Query() query: CompanyDto.Query): Promise<CompanyDto.Paginated> {
     return this.companyService.fetch(query);
   }
@@ -38,7 +38,7 @@ export class CompanyController {
   @Post()
   @ApiCookieAuth()
   @Roles(Role.Admin)
-  @ApiOperation({ summary: '기업 가입' })
+  @ApiOperation({ summary: '기업 가입', operationId: 'registerCompany' })
   async create(@Body() company: CompanyDto.Create) {
     return this.companyService.create(company);
   }
@@ -50,7 +50,7 @@ export class CompanyController {
   @Patch(':id')
   @ApiCookieAuth()
   @Roles(Role.Admin)
-  @ApiOperation({ summary: '기업정보 수정' })
+  @ApiOperation({ summary: '기업정보 수정', operationId: 'editCompany' })
   async update(
     @Param() { id }: Identifiable,
     @Body() company: CompanyDto.Update,
@@ -67,7 +67,7 @@ export class CompanyController {
   @Delete(':id')
   @ApiCookieAuth()
   @Roles(Role.Admin)
-  @ApiOperation({ summary: '기업 탈퇴' })
+  @ApiOperation({ summary: '기업 탈퇴', operationId: 'deleteCompany' })
   async remove(@Param() { id }: Identifiable) {
     return this.companyService.remove(id);
   }
