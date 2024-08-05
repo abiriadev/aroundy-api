@@ -78,6 +78,9 @@ const bootstrap = async () => {
         .addBearerAuth()
         .build(),
     ),
+    {
+      customSiteTitle: 'Aroundy API Documentation',
+    },
   );
 
   app.useGlobalPipes(
