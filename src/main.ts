@@ -69,7 +69,7 @@ const bootstrap = async () => {
         .setTitle('Aroundy')
         .setDescription('Aroundy 앱 및 어드민 페이지 공용 API')
         .setVersion('phase1')
-        .addServer(url, 'production server')
+        .addServer(url, 'staging server')
         .addServer(`http://127.0.0.1:${port}`, 'local server')
         .setExternalDoc(
           'Notion',
