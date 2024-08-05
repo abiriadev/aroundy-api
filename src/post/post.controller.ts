@@ -25,7 +25,10 @@ export class PostController {
    */
   @ApiTags('App', 'Admin')
   @Get()
-  @ApiOperation({ summary: '포스트 목록 조회 및 검색' })
+  @ApiOperation({
+    summary: '포스트 목록 조회 및 검색',
+    operationId: 'fetchPosts',
+  })
   async fetch(@Query() query: PostDto.Query): Promise<PostDto.Paginated> {
     return await this.postService.fetch(query);
   }
@@ -37,7 +40,7 @@ export class PostController {
   @Post()
   @ApiCookieAuth()
   @Roles(Role.Admin)
-  @ApiOperation({ summary: '포스트 등록' })
+  @ApiOperation({ summary: '포스트 등록', operationId: 'createPost' })
   async create(@Body() post: PostDto.Create) {
     return await this.postService.create(post);
   }
@@ -51,7 +54,7 @@ export class PostController {
   @Patch(':id')
   @ApiCookieAuth()
   @Roles(Role.Admin)
-  @ApiOperation({ summary: '포스트 수정' })
+  @ApiOperation({ summary: '포스트 수정', operationId: 'editPost' })
   async update(@Param() { id }: Identifiable, @Body() post: PostDto.Update) {
     return this.postService.update(id, post);
   }
@@ -61,7 +64,7 @@ export class PostController {
    */
   @ApiTags('App')
   @Patch(':id/view')
-  @ApiOperation({ summary: '포스트 조회수 증가' })
+  @ApiOperation({ summary: '포스트 조회수 증가', operationId: 'viewPost' })
   async view(@Param() { id }: Identifiable) {
     return this.postService.view(id);
   }
@@ -73,7 +76,7 @@ export class PostController {
   @Post(':id/like')
   @ApiCookieAuth()
   @Roles(Role.User)
-  @ApiOperation({ summary: '포스트 좋아요 추가' })
+  @ApiOperation({ summary: '포스트 좋아요 추가', operationId: 'likePost' })
   async like(@UserId() userId: string, @Param() { id }: Identifiable) {
     console.log('u', userId);
 
@@ -87,7 +90,7 @@ export class PostController {
   @Delete(':id/like')
   @ApiCookieAuth()
   @Roles(Role.User)
-  @ApiOperation({ summary: '포스트 좋아요 삭제' })
+  @ApiOperation({ summary: '포스트 좋아요 삭제', operationId: 'unlikePost' })
   async unlike(@UserId() userId: string, @Param() { id }: Identifiable) {
     return this.postService.unlike(id, userId);
   }
@@ -99,7 +102,7 @@ export class PostController {
   @Post(':id/save')
   @ApiCookieAuth()
   @Roles(Role.User)
-  @ApiOperation({ summary: '포스트 북마크 저장' })
+  @ApiOperation({ summary: '포스트 북마크 저장', operationId: 'savePost' })
   async save(@UserId() userId: string, @Param() { id }: Identifiable) {
     return this.postService.save(id, userId);
   }
@@ -111,7 +114,7 @@ export class PostController {
   @Delete(':id/save')
   @ApiCookieAuth()
   @Roles(Role.User)
-  @ApiOperation({ summary: '포스트 북마크 삭제' })
+  @ApiOperation({ summary: '포스트 북마크 삭제', operationId: 'unsavePost' })
   async unsave(@UserId() userId: string, @Param() { id }: Identifiable) {
     return this.postService.unsave(id, userId);
   }
@@ -123,7 +126,7 @@ export class PostController {
   @Delete(':id')
   @ApiCookieAuth()
   @Roles(Role.Admin)
-  @ApiOperation({ summary: '포스트 삭제' })
+  @ApiOperation({ summary: '포스트 삭제', operationId: 'deletePost' })
   async remove(@Param() { id }: Identifiable) {
     return this.postService.remove(id);
   }
