@@ -18,7 +18,7 @@ export class TagController {
    */
   @ApiTags('App', 'Admin')
   @Get()
-  @ApiOperation({ summary: '태그 목록 조회' })
+  @ApiOperation({ summary: '태그 목록 조회', operationId: 'fetchTags' })
   async fetch(): Promise<Array<TagDto>> {
     return this.TagService.fetch();
   }
@@ -32,7 +32,7 @@ export class TagController {
   @Post()
   @ApiCookieAuth()
   @Roles(Role.Admin)
-  @ApiOperation({ summary: '태그 등록' })
+  @ApiOperation({ summary: '태그 등록', operationId: 'createTag' })
   async create(@Body() Tag: TagDto.Create) {
     return this.TagService.create(Tag);
   }
