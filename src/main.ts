@@ -80,6 +80,9 @@ const bootstrap = async () => {
     ),
     {
       customSiteTitle: 'Aroundy API Documentation',
+      swaggerOptions: {
+        displayOperationId: true,
+      },
     },
   );
 
