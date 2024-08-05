@@ -18,7 +18,10 @@ export class CategoryController {
    */
   @ApiTags('App', 'Admin')
   @Get()
-  @ApiOperation({ summary: '카테고리 목록 조회' })
+  @ApiOperation({
+    summary: '카테고리 목록 조회',
+    operationId: 'fetchCategories',
+  })
   async fetch(): Promise<Array<CategoryDto>> {
     return await this.categoryService.fetch();
   }
@@ -32,7 +35,7 @@ export class CategoryController {
   @Post()
   @ApiCookieAuth()
   @Roles(Role.Admin)
-  @ApiOperation({ summary: '카테고리 추가' })
+  @ApiOperation({ summary: '카테고리 추가', operationId: 'createCategory' })
   async create(@Body() category: CategoryDto.Create) {
     await this.categoryService.create(category);
   }
