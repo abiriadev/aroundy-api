@@ -99,7 +99,7 @@ export namespace ConfigService {
         type: this.type,
         project_id: this.projectId,
         private_key_id: this.privateKeyId,
-        private_key: this.privateKey,
+        private_key: this.privateKey.replaceAll('\\n', ''),
         client_email: this.clientEmail,
         client_id: this.clientId,
         auth_uri: this.authUri,
