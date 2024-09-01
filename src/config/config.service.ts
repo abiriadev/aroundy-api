@@ -96,16 +96,16 @@ export namespace ConfigService {
     @IsObject()
     get credential(): Record<string, string> {
       return {
-        type: this.type,
+        //type: this.type,
         project_id: this.projectId,
-        private_key_id: this.privateKeyId,
-        private_key: this.privateKey,
+        //private_key_id: this.privateKeyId,
+        private_key: this.privateKey.replace(/\\n/g, '\n'),
         client_email: this.clientEmail,
-        client_id: this.clientId,
-        auth_uri: this.authUri,
-        token_uri: this.tokenUri,
-        auth_provider_x509_cert_url: this.authProviderX509CertUrl,
-        client_x509_cert_url: this.clientX509CertUrl,
+        //client_id: this.clientId,
+        //auth_uri: this.authUri,
+        //token_uri: this.tokenUri,
+        //auth_provider_x509_cert_url: this.authProviderX509CertUrl,
+        //client_x509_cert_url: this.clientX509CertUrl,
       };
     }
   }

@@ -86,13 +86,12 @@ export class AuthService {
 
   async createUser(uid: string): Promise<void> {
     // if user exists, return
-    let user = await getAuth(this.app)
-      .getUser(uid)
-      .catch(() => null);
+    const auth = getAuth(this.app);
+    const user = await auth.getUser(uid).catch(() => null);
     if (user) return;
 
     // create user
-    user = await getAuth(this.app).createUser({
+    await auth.createUser({
       uid,
     });
 
@@ -123,7 +122,7 @@ export class AuthService {
 
     if (res.data.id) {
       const uid = this.generateUidHash(res.data.id.toString());
-      this.createUser(uid);
+      await this.createUser(uid);
       return uid;
     } else {
       return '';

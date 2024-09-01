@@ -8,7 +8,21 @@ describe('UserController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
-      providers: [UserService],
+      providers: [
+        UserService,
+        {
+          provide: 'PrismaService',
+          useValue: {
+            client: {
+              user: {
+                findMany: jest.fn(),
+                findUniqueOrThrow: jest.fn(),
+                delete: jest.fn(),
+              },
+            },
+          },
+        },
+      ],
     }).compile();
 
     controller = module.get<UserController>(UserController);
