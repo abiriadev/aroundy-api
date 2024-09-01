@@ -2,8 +2,8 @@ name: Deploy to ECR
 on:
   push:
     branches:
-      - dev
-      - prod
+      - deploy/stage
+      - deploy/prod
 jobs:
   build:
     runs-on: ubuntu-latest
