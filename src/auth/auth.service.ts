@@ -111,14 +111,16 @@ export class AuthService {
   }
 
   async getKakaoUser(kakaoToken: string): Promise<string> {
-    // get user id from kakao
+    console.log(kakaoToken);
     const res = await firstValueFrom(
       this.httpService.get<KakaoUser>(AuthService.KAKAO_API_URL, {
         headers: {
           Authorization: `Bearer ${kakaoToken}`,
         },
       }),
-    );
+    ).catch(() => {
+      return { data: { id: '' } };
+    });
 
     if (res.data.id) {
       const uid = this.generateUidHash(res.data.id.toString());
@@ -137,7 +139,9 @@ export class AuthService {
           Authorization: `Bearer ${naverToken}`,
         },
       }),
-    );
+    ).catch(() => {
+      return { data: { response: { id: '' } } };
+    });
 
     if (res.data.response.id) {
       const uid = this.generateUidHash(res.data.response.id);
