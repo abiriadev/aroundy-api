@@ -31,6 +31,6 @@ jobs:
           build-args: tag=${{ steps.tag.outputs.rev }}
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ steps.tag.outputs.rev }}
-            ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.ref_name == "deploy/stage" && "dev" || "prod" }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.ref_name == 'deploy/stage' && 'dev' || 'prod' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
