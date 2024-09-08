@@ -84,11 +84,11 @@ export class AuthService {
     return hash.substring(0, 28);
   }
 
-  async createUser(uid: string): Promise<void> {
+  async createUser(uid: string): Promise<{ uid: string; status: string }> {
     // if user exists, return
     const auth = getAuth(this.app);
     const user = await auth.getUser(uid).catch(() => null);
-    if (user) return;
+    if (user) return { uid: uid, status: 'Success' };
 
     // create user
     await auth.createUser({
@@ -108,10 +108,13 @@ export class AuthService {
         recentlyLoggedInAt: new Date(),
       },
     });
+
+    return { uid: uid, status: 'User created' };
   }
 
-  async getKakaoUser(kakaoToken: string): Promise<string> {
-    console.log(kakaoToken);
+  async getKakaoUser(
+    kakaoToken: string,
+  ): Promise<{ uid: string; status: string }> {
     const res = await firstValueFrom(
       this.httpService.get<KakaoUser>(AuthService.KAKAO_API_URL, {
         headers: {
@@ -124,15 +127,15 @@ export class AuthService {
 
     if (res.data.id) {
       const uid = this.generateUidHash(res.data.id.toString());
-      await this.createUser(uid);
-      return uid;
+      return await this.createUser(uid);
     } else {
-      return '';
+      return { uid: '', status: 'Expired token' };
     }
   }
 
-  async getNaverUser(naverToken: string): Promise<string> {
-    // get user id from naver
+  async getNaverUser(
+    naverToken: string,
+  ): Promise<{ uid: string; status: string }> {
     const res = await firstValueFrom(
       this.httpService.get<NaverUser>(AuthService.NAVER_API_URL, {
         headers: {
@@ -145,10 +148,9 @@ export class AuthService {
 
     if (res.data.response.id) {
       const uid = this.generateUidHash(res.data.response.id);
-      this.createUser(uid);
-      return uid;
+      return await this.createUser(uid);
     } else {
-      return '';
+      return { uid: '', status: 'Expired token' };
     }
   }
 

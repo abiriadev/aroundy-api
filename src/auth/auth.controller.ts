@@ -14,9 +14,9 @@ export class AuthController {
   @ApiOperation({ summary: '네이버 소셜 로그인', operationId: 'loginNaver' })
   async naverLogin(@Headers('authorization') authHeader: string) {
     const token = this.extractTokenFromHeader(authHeader);
-    const uid = await this.authService.getNaverUser(token);
+    const { uid, status } = await this.authService.getNaverUser(token);
     const customToken = await this.authService.createCustomToken(uid);
-    return { customToken };
+    return { customToken, status };
   }
 
   /**
@@ -27,9 +27,9 @@ export class AuthController {
   @ApiOperation({ summary: '카카오 소셜 로그인', operationId: 'loginKakao' })
   async kakaoLogin(@Headers('authorization') authHeader: string) {
     const token = this.extractTokenFromHeader(authHeader);
-    const uid = await this.authService.getKakaoUser(token);
+    const { uid, status } = await this.authService.getKakaoUser(token);
     const customToken = await this.authService.createCustomToken(uid);
-    return { customToken };
+    return { customToken, status };
   }
 
   private extractTokenFromHeader(authHeader: string): string {
